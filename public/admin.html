@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CSDSA Administration</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f8f5;color:#17251d}
+header{background:#fff;border-bottom:3px solid #087443;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header img{max-width:150px;height:auto}header h1{font-size:18px;margin:0;color:#087443;flex:1}
+main{max-width:1150px;margin:20px auto;padding:0 16px}.card{background:#fff;border:1px solid #d5e2da;border-radius:12px;padding:18px;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}.stat{background:#fff;border:1px solid #d5e2da;border-radius:12px;padding:14px}.stat b{display:block;font-size:26px;color:#087443}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}button,.tab{font:inherit;border:1px solid #087443;background:#fff;color:#087443;border-radius:8px;padding:8px 14px;cursor:pointer}button.on,button.pri{background:#087443;color:#fff}button.bad{border-color:#b3261e;color:#b3261e}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #e3ece6;padding:8px;text-align:left;vertical-align:top}th{background:#eaf3ee}.wrap{overflow-x:auto}
+input{font:inherit;padding:9px;border:1px solid #b9cbbf;border-radius:8px;width:100%;margin:6px 0 12px}.login{max-width:380px;margin:60px auto}.pill{padding:2px 9px;border-radius:99px;font-size:12px;background:#eaf3ee}.pill.p{background:#fff3cd}.pill.r{background:#f8d7da}.err{color:#b3261e}
+</style></head><body>
+<header><img src="csdsa-logo.png" alt="CSDSA"><h1>Administration</h1><span id="who"></span><button id="out" style="display:none" onclick="logout()">Sign out</button></header>
+<main id="app"></main>
+<script>
+let tok = sessionStorage.getItem('adm'), D = null, tab = 'pay';
+const $ = id => document.getElementById(id), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+async function api(path, body) {
+  const r = await fetch('/api', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (tok || '') }, body: JSON.stringify({ path, body: body || {} }) });
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || 'Something went wrong.'); return j;
+}
+function loginView(m) {
+  $('out').style.display = 'none'; $('who').textContent = '';
+  $('app').innerHTML = `<div class="card login"><h2>Administrator sign in</h2><label>Email</label><input id="id" autocomplete="username"><label>Password</label><input id="pw" type="password" autocomplete="current-password"><button class="pri" onclick="login()">Sign in</button><p class="err">${esc(m || '')}</p></div>`;
+}
+async function login() {
+  try { const r = await api('/auth/login', { identifier: $('id').value, password: $('pw').value }); tok = r.session.access_token; sessionStorage.setItem('adm', tok); await load(); } catch (e) { loginView(e.message); }
+}
+function logout() { sessionStorage.removeItem('adm'); tok = null; loginView(); }
+async function load() {
+  try { const me = await api('/me'); if (!me.user.isAdmin) { tok = null; sessionStorage.removeItem('adm'); return loginView('This account is not an administrator.'); } $('who').textContent = me.user.name; $('out').style.display = ''; D = await api('/admin/overview'); draw(); } catch (e) { loginView(e.message); }
+}
+const state = u => u.result ? (u.result.passed ? 'Passed' : 'Not passed') : 'Outstanding';
+const pill = s => `<span class="pill ${s === 'pending' ? 'p' : s === 'rejected' ? 'r' : ''}">${esc(s)}</span>`;
+function csv(name, rows) { const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"', a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + rows.map(r => r.map(q).join(',')).join('\r\n')], { type: 'text/csv' })); a.download = name; a.click(); }
+function draw() {
+  const u = D.users, pend = D.payments.filter(p => p.submitted && p.status === 'pending'), wait = D.certs.filter(c => c.signStatus === 'requested');
+  const emp = u.filter(x => x.type === 'employee'), biz = u.filter(x => x.type === 'business');
+  const stats = [['Awaiting approval', pend.length], ['Employers', biz.length], ['Employees', emp.length], ['Individuals', u.filter(x => x.type === 'individual').length], ['Passed', u.filter(x => x.result && x.result.passed).length], ['Certificates', D.certs.length], ['To be signed', wait.length]];
+  let h = '';
+  if (tab === 'pay') h = `<div class="card wrap"><h3>Payments</h3><table><tr><th>Date</th><th>Reference</th><th>Paid by</th><th>Item</th><th>Amount</th><th>Status</th><th></th></tr>${D.payments.map(p => `<tr><td>${new Date(p.createdAt).toLocaleDateString('en-ZA')}</td><td>${esc(p.reference)}${p.note ? '<br>' + esc(p.note) : ''}</td><td>${esc(p.userName)}<br>${esc(p.company)}</td><td>${esc(p.title)}</td><td>R${esc(p.amount)}</td><td>${pill(p.submitted ? p.status : 'not submitted')}</td><td>${p.hasProof ? `<button onclick="proof('${p.id}')">View proof</button> ` : ''}${p.submitted && p.status === 'pending' ? `<button class="pri" onclick="review('${p.id}','approved')">Approve</button> <button class="bad" onclick="review('${p.id}','rejected')">Reject</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="7">No payments yet.</td></tr>'}</table></div><div id="pv"></div>`;
+  if (tab === 'cert') h = `<div class="card wrap"><h3>Certificates</h3><table><tr><th>Number</th><th>Learner</th><th>Company</th><th>Score</th><th>Issued</th><th>Signature</th><th></th></tr>${D.certs.map(c => `<tr><td>${esc(c.number)}</td><td>${esc(c.learner)}</td><td>${esc(c.company)}</td><td>${c.score}/${c.total}</td><td>${new Date(c.issuedAt).toLocaleDateString('en-ZA')}</td><td>${pill(c.signStatus || 'not requested')}${c.signRequestedTo ? '<br>' + esc(c.signRequestedTo) : ''}</td><td>${c.signStatus === 'signed' ? '' : `<button class="pri" onclick="sign('${esc(c.verifyToken)}')">Mark as signed</button>`}</td></tr>`).join('') || '<tr><td colspan="7">No certificates yet.</td></tr>'}</table></div>`;
+  if (tab === 'emp') h = `<div class="card"><button onclick="exportEmp()">Download employers and employees (CSV)</button></div>` + biz.map(b => { const s = emp.filter(e => e.boss === b.id); return `<div class="card wrap"><h3>${esc(b.company || b.name)}</h3><p>${esc(b.name)} · ${esc(b.email)} · ${s.length} employees</p><table><tr><th>Employee</th><th>ID / contact</th><th>Job title</th><th>Course</th><th>Assessment</th><th>Score</th></tr>${s.map(e => `<tr><td>${esc(e.name)}</td><td>${esc(e.idNumber || e.phone)}</td><td>${esc(e.job)}</td><td>${e.course ? 'Paid' : 'Awaiting payment'}</td><td>${state(e)}</td><td>${e.result ? Math.round(e.result.score / e.result.total * 100) + '%' : ''}</td></tr>`).join('') || '<tr><td colspan="6">No employees yet.</td></tr>'}</table></div>`; }).join('') || '<div class="card">No employers yet.</div>';
+  if (tab === 'ind') h = `<div class="card wrap"><h3>Individual learners</h3><table><tr><th>Name</th><th>Email</th><th>Course</th><th>Assessment</th><th>Score</th></tr>${u.filter(x => x.type === 'individual').map(e => `<tr><td>${esc(e.name)}</td><td>${esc(e.email)}</td><td>${e.course ? 'Paid' : 'Not paid'}</td><td>${state(e)}</td><td>${e.result ? Math.round(e.result.score / e.result.total * 100) + '%' : ''}</td></tr>`).join('') || '<tr><td colspan="5">None yet.</td></tr>'}</table></div>`;
+  $('app').innerHTML = `<div class="stats">${stats.map(s => `<div class="stat"><b>${s[1]}</b>${s[0]}</div>`).join('')}</div><div class="tabs">${[['pay', 'Payments'], ['cert', 'Certificates'], ['emp', 'Employers'], ['ind', 'Individuals']].map(t => `<button class="${tab === t[0] ? 'on' : ''}" onclick="tab='${t[0]}';draw()">${t[1]}</button>`).join('')}</div>${h}`;
+}
+async function proof(id) {
+  const { proof: f } = await api('/admin/proof/' + id), u = URL.createObjectURL(await (await fetch(f.data)).blob());
+  $('pv').innerHTML = `<div class="card"><h3>Proof of payment</h3>${f.type === 'application/pdf' ? `<iframe src="${u}" style="width:100%;height:560px;border:0"></iframe>` : `<img src="${u}" alt="Proof of payment" style="max-width:100%">`}<p><a href="${u}" download="${esc(f.name)}">Download file</a></p></div>`; $('pv').scrollIntoView({ behavior: 'smooth' });
+}
+async function review(id, status) { if (!confirm(status === 'approved' ? 'Approve this payment and unlock access?' : 'Reject this payment?')) return; try { await api('/admin/payment-requests/' + id + '/review', { status }); await load(); } catch (e) { alert(e.message); } }
+async function sign(t) { try { await api('/admin/certificates/' + t + '/sign'); await load(); } catch (e) { alert(e.message); } }
+function exportEmp() { const rows = [['Company', 'Employer', 'Employee', 'ID / contact', 'Job title', 'Course', 'Assessment', 'Score']]; D.users.filter(x => x.type === 'employee').forEach(e => { const b = D.users.find(x => x.id === e.boss) || {}; rows.push([b.company, b.name, e.name, e.idNumber || e.phone, e.job, e.course ? 'Paid' : 'Awaiting payment', state(e), e.result ? Math.round(e.result.score / e.result.total * 100) + '%' : '']); }); csv('CSDSA-employers-' + new Date().toISOString().slice(0, 10) + '.csv', rows); }
+if (tok) load(); else loginView();
+</script></body></html>

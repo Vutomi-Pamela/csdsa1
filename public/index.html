@@ -1,0 +1,1278 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CSDSA Learning Academy | Professional Learning Portal</title>
+    <meta name="theme-color" content="#087443">
+    <meta name="description" content="CSDSA Learning Academy — professional food safety training, webinars, assessments and organisational learning management.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --green: #147446;
+            --deep: #123c2a;
+            --ink: #202d29;
+            --muted: #68746f;
+            --line: #e3e9e5;
+            --bg: #f7f9f7
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font: 14px Inter, Arial, sans-serif;
+            color: var(--ink);
+            background: var(--bg)
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: Montserrat, Arial, sans-serif;
+            letter-spacing: -.025em
+        }
+
+        button,
+        input,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        a {
+            color: var(--green);
+            text-decoration: none
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        .btn {
+            background: var(--green);
+            color: white;
+            border: 1px solid var(--green);
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-weight: 700
+        }
+
+        .btn:hover {
+            background: #0f5d37
+        }
+
+        .btn.outline {
+            background: white;
+            color: var(--green)
+        }
+
+        .btn.small {
+            padding: 9px 13px;
+            font-size: 12px
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .eyebrow {
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .13em;
+            text-transform: uppercase
+        }
+
+        .auth {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr;
+            background: #ffffff
+        }
+
+        .auth-photo {
+            display: none;
+            background: linear-gradient(0deg, rgba(10, 42, 27, .85), rgba(10, 42, 27, .08)), url('handwashing.jpg') center/cover;
+            display: flex;
+            align-items: end;
+            color: white;
+            padding: 8%
+        }
+
+        .auth-photo h1 {
+            font-size: clamp(32px, 4vw, 57px);
+            line-height: 1.13;
+            max-width: 600px
+        }
+
+        .auth-photo p {
+            max-width: 520px;
+            line-height: 1.9;
+            color: #e7f1eb
+        }
+
+        .auth-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 7%
+        }
+
+        .auth-inner {
+            width: min(100%, 480px)
+        }
+
+        .brand-logo { width: 320px; height: auto; max-height: 100px; object-fit: contain; display: block; flex: 0 1 auto; }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: Montserrat;
+            font-weight: 800;
+            color: var(--deep);
+            font-size: 23px;
+            letter-spacing: -.04em
+        }
+
+        .mark {
+            background: var(--green);
+            color: white;
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 3px;
+            font-size: 18px
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font: 500 9px Inter;
+            letter-spacing: .02em;
+            margin-top: 3px
+        }
+
+        .auth h2 {
+            font-size: 29px;
+            margin: 52px 0 9px
+        }
+
+        .auth .intro {
+            line-height: 1.8;
+            margin-bottom: 29px
+        }
+
+        .field {
+            margin-bottom: 17px
+        }
+
+        .field label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 8px
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            border: 1px solid #cfd8d2;
+            border-radius: 4px;
+            padding: 13px;
+            background: white;
+            outline-color: var(--green)
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px
+        }
+
+        .form-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0 22px;
+            font-size: 12px
+        }
+
+        .form-meta label {
+            display: flex;
+            gap: 7px;
+            align-items: center
+        }
+
+        .full {
+            width: 100%
+        }
+
+        .notice {
+            background: #edf7f0;
+            border-left: 3px solid var(--green);
+            padding: 12px;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 15px 0
+        }
+
+        .auth-footer {
+            border-top: 1px solid var(--line);
+            padding-top: 23px;
+            margin-top: 30px;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8
+        }
+
+        .topbar {
+            height: 77px;
+            background: white;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            gap: 20px
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .avatar {
+            background: #e8efe9;
+            border-radius: 50%;
+            height: 35px;
+            width: 35px;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            color: var(--deep)
+        }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: 230px minmax(0, 1fr);
+            min-height: calc(100vh - 77px)
+        }
+
+        aside {
+            background: white;
+            border-right: 1px solid var(--line);
+            padding: 28px 15px
+        }
+
+        .navbtn {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            border: 0;
+            background: none;
+            padding: 14px 15px;
+            text-align: left;
+            color: #53615a;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 5px
+        }
+
+        .navbtn.active,
+        .navbtn:hover {
+            background: #eaf3ed;
+            color: var(--green)
+        }
+
+        .side-label {
+            font-size: 10px;
+            color: #89958d;
+            letter-spacing: .12em;
+            margin: 30px 15px 12px;
+            font-weight: 800
+        }
+
+        main {
+            padding: 43px clamp(22px, 4.5vw, 76px);
+            max-width: 1400px;
+            width: 100%;
+            margin: auto
+        }
+
+        .pagehead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 32px
+        }
+
+        .pagehead h1 {
+            font-size: 28px;
+            margin: 7px 0
+        }
+
+        .pagehead p {
+            color: var(--muted);
+            margin: 0
+        }
+
+        .crumb {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 25px
+        }
+
+        .crumb a {
+            color: var(--muted)
+        }
+
+        .sectiontitle {
+            font-size: 18px;
+            margin: 0 0 22px
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 40px
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid var(--line);
+            padding: 24px;
+            border-radius: 5px
+        }
+
+        .stat strong {
+            display: block;
+            font: 700 24px Montserrat;
+            margin-top: 13px
+        }
+
+        .stat span {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .course-card {
+            display: grid;
+            grid-template-columns: 38% 1fr;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            overflow: hidden;
+            max-width: 1040px
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 100%;
+            min-height: 310px;
+            object-fit: cover
+        }
+
+        .course-content {
+            padding: 33px 36px
+        }
+
+        .course-content h3 {
+            font-size: 23px;
+            margin: 14px 0
+        }
+
+        .course-content p {
+            line-height: 1.8;
+            color: var(--muted)
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .tag {
+            font-size: 11px;
+            background: #eef4ef;
+            color: #376b4b;
+            padding: 7px 10px;
+            border-radius: 3px;
+            font-weight: 700
+        }
+
+        .course-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-top: 1px solid var(--line);
+            margin-top: 27px;
+            padding-top: 23px
+        }
+
+        .price {
+            font: 800 24px Montserrat
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 310px;
+            gap: 27px
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            padding: 28px;
+            margin-bottom: 20px
+        }
+
+        .panel h3 {
+            margin: 0 0 16px;
+            font-size: 17px
+        }
+
+        .panel p,
+        .panel li {
+            line-height: 1.9;
+            color: #59675e
+        }
+
+        .detail-img {
+            width: 100%;
+            height: 310px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 22px
+        }
+
+        .outline-list {
+            padding-left: 20px
+        }
+
+        .payrow {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .float-links {
+            position: fixed;
+            bottom: 24px;
+            right: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10
+        }
+
+        .float-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: var(--green);
+            color: white;
+            box-shadow: 0 5px 17px #0002;
+            font-weight: 800;
+            font-size: 17px
+        }
+
+        .float-links a:hover {
+            background: var(--deep);
+            text-decoration: none
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white
+        }
+
+        .table th,
+        .table td {
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            padding: 16px;
+            font-size: 13px
+        }
+
+        .table th {
+            background: #f5f8f5;
+            color: #526057
+        }
+
+        .lesson {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            gap: 15px
+        }
+
+        .fine {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.8
+        }
+
+        .mobilemenu {
+            display: none
+        }
+
+        @media(max-width:900px) {
+            .auth {
+                grid-template-columns: 1fr
+            }
+
+            .auth-photo {
+                display: none
+            }
+
+            .auth-right {
+                min-height: 100vh
+            }
+
+            .topbar {
+                padding: 0 18px
+            }
+
+            .app-shell {
+                grid-template-columns: 1fr
+            }
+
+            aside {
+                display: flex;
+                overflow: auto;
+                padding: 10px;
+                border-bottom: 1px solid var(--line);
+                gap: 5px
+            }
+
+            .navbtn {
+                white-space: nowrap;
+                margin: 0
+            }
+
+            .side-label {
+                display: none
+            }
+
+            .stats {
+                grid-template-columns: 1fr
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr
+            }
+
+            .course-card {
+                grid-template-columns: 1fr
+            }
+
+            .course-card img {
+                height: 230px;
+                min-height: 0
+            }
+
+            .course-content {
+                padding: 23px
+            }
+
+            .pagehead {
+                align-items: start;
+                flex-direction: column
+            }
+
+            .top-actions .muted {
+                display: none
+            }
+        }
+
+        @media(max-width:450px) {
+            .field-row {
+                grid-template-columns: 1fr
+            }
+
+            .auth-right {
+                padding: 32px 22px
+            }
+
+            .brand-logo { width: 320px; height: auto; max-height: 100px; object-fit: contain; display: block; flex: 0 1 auto; }
+
+        .brand {
+                font-size: 18px
+            }
+
+            .course-bottom {
+                align-items: start;
+                flex-direction: column
+            }
+
+            .topbar .btn {
+                padding: 8px
+            }
+        }
+
+
+        :root {
+            --green: #087443;
+            --deep: #073f2a;
+            --ink: #172b22;
+            --muted: #687970;
+            --line: #dce8df;
+            --bg: #f3f7f4;
+            --green-soft: #e8f5ed;
+            --gold: #d8aa45;
+            --shadow-soft: 0 12px 32px rgba(13, 63, 39, .065);
+            --shadow-hover: 0 18px 42px rgba(13, 63, 39, .12);
+        }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--ink); letter-spacing: -.008em; }
+        button, input, select, textarea { transition: border-color .18s ease, box-shadow .18s ease, background .18s ease, transform .18s ease; }
+        button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid rgba(8,116,67,.25); outline-offset: 2px; }
+        .btn { border-radius: 10px; padding: 12px 19px; box-shadow: 0 4px 10px rgba(8,116,67,.10); }
+        .btn:hover { background: #075a35; transform: translateY(-1px); box-shadow: 0 8px 18px rgba(8,116,67,.18); }
+        .btn:active { transform: translateY(0); }
+        .btn.outline { border-color: #cbded1; box-shadow: none; }
+        .btn.outline:hover { background: var(--green-soft); border-color: #8bbda0; }
+        .auth { position: relative; isolation: isolate; background: radial-gradient(ellipse at 8% 12%, rgba(199,232,211,.65), transparent 34%), radial-gradient(ellipse at 93% 88%, rgba(216,170,69,.11), transparent 28%), #f5f8f5; }
+        .auth-right { position: relative; z-index: 1; padding: 36px 24px; }
+        .auth-inner { width: min(100%, 490px); background: rgba(255,255,255,.96); border: 1px solid rgba(211,228,216,.9); border-radius: 24px; padding: clamp(28px, 4vw, 48px); box-shadow: 0 25px 75px rgba(7,63,42,.10); animation: rise-in .55s ease both; }
+        .brand-logo { width: 300px; max-width: 100%; max-height: 94px; }
+        .auth h2 { margin-top: 30px; font-size: clamp(26px, 3vw, 32px); line-height: 1.18; color: var(--deep); }
+        .auth .intro { margin-bottom: 24px; }
+        .field { margin-bottom: 16px; }
+        .field label { color: #344d3e; font-size: 12px; }
+        .field input, .field select { border: 1px solid #d3e0d7; border-radius: 10px; padding: 14px 15px; background: #fbfdfb; }
+        .field input:hover, .field select:hover { border-color: #9abca6; }
+        .field input:focus, .field select:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(8,116,67,.09); outline: 0; background: #fff; }
+        .form-meta { color: var(--muted); }
+        .form-meta input { accent-color: var(--green); }
+        .auth-footer { margin-top: 25px; padding-top: 18px; font-size: 11px; }
+        .topbar { position: sticky; top: 0; z-index: 20; height: 78px; padding: 0 clamp(18px, 3.2vw, 48px); background: rgba(255,255,255,.94); backdrop-filter: blur(14px); border-bottom: 1px solid #dce8df; box-shadow: 0 3px 15px rgba(16,52,32,.035); }
+        .topbar .brand-logo { width: 245px; max-height: 66px; }
+        .top-actions { gap: 12px; }
+        .top-actions .muted { font-size: 12px; font-weight: 600; }
+        .avatar { background: linear-gradient(145deg,#e5f4e9,#cfe7d7); border: 1px solid #c6dfcf; color: var(--deep); width: 39px; height: 39px; }
+        .app-shell { grid-template-columns: 248px minmax(0,1fr); }
+        aside { position: sticky; top: 78px; align-self: start; height: calc(100vh - 78px); overflow-y: auto; background: linear-gradient(180deg,#fff 0%,#fbfdfb 100%); border-right: 1px solid #dce8df; padding: 25px 14px; }
+        .navbtn { position: relative; border-radius: 10px; padding: 12px 14px; min-height: 44px; color: #506258; font-size: 13px; margin-bottom: 4px; }
+        .navbtn.active { background: linear-gradient(100deg,#e5f4ea,#f0f8f2); color: var(--deep); box-shadow: inset 3px 0 0 var(--green); }
+        .navbtn:hover { background: #eff7f1; color: var(--green); transform: translateX(2px); }
+        .side-label { margin-top: 24px; color: #8a9b90; font-size: 9px; }
+        main { max-width: none; padding: clamp(24px,3vw,44px) clamp(20px,3.2vw,54px) 70px; }
+        .pagehead { margin-bottom: 27px; }
+        .pagehead h1 { color: var(--deep); font-size: clamp(26px,2.3vw,34px); line-height: 1.18; }
+        .pagehead p { line-height: 1.7; max-width: 760px; }
+        .eyebrow { letter-spacing: .16em; }
+        .stats { grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat { position: relative; overflow: hidden; border: 1px solid #deebe1; border-radius: 15px; padding: 22px; box-shadow: var(--shadow-soft); transition: transform .22s ease, box-shadow .22s ease; }
+        .stat::after { content: ''; position: absolute; right: -24px; top: -27px; width: 88px; height: 88px; border-radius: 50%; background: rgba(8,116,67,.055); }
+        .stat:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+        .stat strong { color: var(--deep); font-size: 27px; margin-top: 12px; }
+        .stat span { font-weight: 600; }
+        .panel, .course-card { border: 1px solid #deebe1; border-radius: 16px; box-shadow: var(--shadow-soft); }
+        .panel { padding: clamp(20px,2.2vw,30px); }
+        .panel h3 { color: var(--deep); }
+        .panel p, .panel li { line-height: 1.8; }
+        .course-card { overflow: hidden; }
+        .course-card img { filter: saturate(.92); }
+        .course-content { padding: clamp(23px,3vw,38px); }
+        .course-content h3 { color: var(--deep); line-height: 1.25; }
+        .tag { border-radius: 999px; padding: 7px 11px; }
+        .course-bottom { flex-wrap: wrap; }
+        .price { color: var(--deep); }
+        .detail-grid { gap: 20px; }
+        .notice { border-left-width: 4px; border-radius: 0 11px 11px 0; padding: 15px 17px; }
+        .table { border-radius: 12px; overflow: hidden; }
+        .table th, .table td { padding: 14px 15px; }
+        .table th { background: #f0f6f1; color: #40584a; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+        .table tbody tr:hover { background: #f7fbf8; }
+        .payrow { gap: 16px; align-items: center; }
+        .float-links a { border-radius: 14px; background: var(--deep); }
+        .float-links a:hover { background: var(--green); transform: translateY(-2px); }
+        .fine { line-height: 1.7; }
+        .tag, .avatar, .stat, .panel, .course-card { -webkit-backface-visibility: hidden; }
+        @keyframes rise-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (min-width: 1500px) { main { padding-left: 58px; padding-right: 58px; } .app-shell { grid-template-columns: 265px minmax(0,1fr); } }
+        @media (max-width: 900px) {
+            .topbar { height: auto; min-height: 70px; padding: 12px 16px; flex-wrap: wrap; }
+            .topbar .brand-logo { width: 205px; }
+            .app-shell { grid-template-columns: 1fr; }
+            aside { position: sticky; top: 70px; z-index: 15; height: auto; padding: 9px 10px; background: rgba(255,255,255,.97); backdrop-filter: blur(10px); }
+            aside .navbtn { width: auto; flex: 0 0 auto; padding: 10px 12px; min-height: 40px; }
+            main { padding: 26px 18px 60px; }
+            .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+            .detail-grid { grid-template-columns: minmax(0,1fr); }
+            .auth-inner { border-radius: 20px; }
+        }
+        @media (max-width: 560px) {
+            .auth-right { padding: 16px 12px; }
+            .auth-inner { padding: 25px 20px; }
+            .auth h2 { margin-top: 24px; }
+            .top-actions { gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+            .top-actions .btn { padding: 8px 10px; }
+            .topbar .brand-logo { width: 170px; }
+            .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .stat { padding: 16px 14px; }
+            .stat strong { font-size: 22px; }
+            .pagehead h1 { font-size: 25px; }
+            .panel { padding: 18px; }
+            .table { display: block; overflow-x: auto; white-space: nowrap; }
+            .field-row { grid-template-columns: 1fr; gap: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+
+
+        .auth { min-height: 100svh; padding: clamp(18px, 4vw, 48px); align-items: center; }
+        .auth-right { width: 100%; padding: 0; }
+        .auth-inner { width: min(100%, 520px); padding: clamp(24px, 4vw, 42px); border: 1px solid #e3ece5; border-radius: 22px; background: #fff; box-shadow: 0 24px 70px rgba(18,60,42,.09); }
+        .auth-inner > .brand { justify-content: center; width: 100%; min-width: 0; overflow: visible; }
+        .auth-inner .brand-logo { width: min(100%, 330px); max-width: 100%; max-height: 112px; object-fit: contain; }
+        .auth h2 { margin-top: 32px; line-height: 1.2; }
+        .auth .intro { margin-bottom: 24px; }
+        .auth .field input, .auth .field select { min-height: 46px; border-radius: 9px; }
+        .btn { border-radius: 9px; min-height: 44px; transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 7px 18px rgba(20,116,70,.15); }
+        .btn:focus-visible, .navbtn:focus-visible, a:focus-visible { outline: 3px solid #a4d8b7; outline-offset: 3px; }
+        .topbar { height: auto; min-height: 82px; padding: 14px clamp(14px, 3vw, 38px); flex-wrap: wrap; }
+        .topbar > .brand { flex: 0 1 auto; min-width: 0; max-width: 100%; }
+        .topbar .brand-logo { width: clamp(150px, 21vw, 260px); max-width: 100%; max-height: 62px; object-fit: contain; }
+        .top-actions { min-width: 0; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+        .top-actions #topname { max-width: 180px; overflow-wrap: anywhere; }
+        .app-shell { min-height: calc(100svh - 82px); }
+        .pay-actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin: 16px 0; }
+        .pay-actions .btn { width: 100%; min-width: 0; white-space: normal; }
+        .pay-actions .btn.primary-pay { grid-column: 1 / -1; }
+        .payment-id { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:14px; background:#f4f8f5; border:1px solid #dfeae2; border-radius:12px; }
+        .payment-id strong { font-size: clamp(20px, 3vw, 27px); letter-spacing:.04em; color:var(--deep); }
+        .payment-help { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:18px 0; }
+        .payment-help > div { background:#f7faf8; border:1px solid var(--line); padding:13px; border-radius:10px; }
+        .payment-help b { display:block; color:var(--deep); margin-bottom:5px; }
+        @media (min-width: 1050px) { .auth { grid-template-columns: minmax(0,1fr); } }
+        @media (max-width: 760px) {
+          .topbar { align-items:flex-start; }
+          .topbar > .brand { width:100%; justify-content:center; }
+          .topbar .brand-logo { width:min(72vw, 250px); }
+          .top-actions { width:100%; justify-content:center; }
+          .top-actions #topname { max-width:120px; }
+          .app-shell { grid-template-columns:minmax(0,1fr); }
+          .app-shell > aside { position:sticky; top:0; z-index:20; display:flex; gap:6px; overflow-x:auto; white-space:nowrap; padding:9px; border-right:0; border-bottom:1px solid var(--line); }
+          .app-shell > aside .navbtn { flex:0 0 auto; width:auto; margin:0; padding:10px 12px; }
+          .app-shell > aside .side-label { display:none; }
+          main { padding:24px 16px 44px; }
+          .payment-help { grid-template-columns:1fr; }
+        }
+        @media (max-width: 480px) {
+          .auth { padding:12px; }
+          .auth-inner { padding:22px 17px; border-radius:16px; }
+          .auth-inner .brand-logo { width:min(100%, 270px); }
+          .field-row { grid-template-columns:minmax(0,1fr); gap:0; }
+          .form-meta { gap:12px; flex-wrap:wrap; }
+          .top-actions .btn { font-size:11px; padding:8px 9px; }
+          .pay-actions { grid-template-columns:minmax(0,1fr); }
+          .pay-actions .btn.primary-pay { grid-column:auto; }
+        }
+
+        .form-error { display:none; color:#b3261e; background:#fdecea; border:1px solid #f5c6c2; border-radius:10px; padding:10px 12px; font-size:13px; line-height:1.5; margin:10px 0 }
+        .form-ok { display:none; color:#0d5a33; background:#e8f5ec; border:1px solid #bfdfca; border-radius:10px; padding:10px 12px; font-size:13px; line-height:1.5; margin:10px 0 }
+        .form-error.show, .form-ok.show { display:block }
+        .navbtn.hidden { display:none !important }
+        @media print { body * { visibility:hidden } #certPrint, #certPrint * { visibility:visible } #certPrint { position:absolute; left:0; top:0; width:100% } }
+    .brand-logo{height:auto!important;width:auto!important;max-width:200px!important;background:#fff;padding:8px 14px;border-radius:10px}.photo,.course-photo,.hero-photo{background:#087443 url(handwashing.jpg) center/cover no-repeat}</style>
+</head>
+
+<body>
+    <section id="auth" class="auth">
+        <div class="auth-right">
+            <div class="auth-inner">
+                <div class="brand"><img class="brand-logo" src="csdsa-logo.png" alt="CSDSA — Centre for Sustainable Development, South Africa"></div>
+                <div id="loginform">
+                    <h2>Welcome back</h2>
+                    <p class="muted intro">Sign in to your learning account to continue your training.</p>
+                    <form onsubmit="login(event)">
+                        <div class="field"><label>Email, ID / passport number or cellphone number</label><input type="text" id="loginemail" required
+                                placeholder="Owner: email · Employee: ID / passport or cellphone" autocomplete="username"></div>
+                        <div class="field"><label>Password</label><input type="password" id="loginpass" required
+                                placeholder="Enter password"></div>
+                        <div class="form-error" id="loginError" role="alert"></div><div class="form-ok" id="loginNotice" role="status"></div><div class="form-meta"><label><input type="checkbox" id="remember"> Remember me</label><a
+                                href="#" onclick="showAuth('reset');return false">Forgot password?</a></div><button
+                            class="btn full">Sign in to portal →</button>
+                    </form>
+                    <p style="text-align:center;margin-top:25px;font-size:13px">New to CSDSA? <a href="#"
+                            onclick="showAuth('register');return false"><b>Create an account</b></a></p>
+                </div>
+                <div id="registerform" class="hidden">
+                    <h2>Create an account</h2>
+                    <p class="muted intro">Register as an individual learner or a company administrator.</p>
+                    <form onsubmit="register(event)">
+                        <div class="field"><label>Account type</label><select id="acct"
+                                onchange="document.getElementById('companyField').classList.toggle('hidden',this.value!=='business')">
+                                <option value="individual">Individual learner</option>
+                                <option value="business">Business / employer</option>
+                            </select></div>
+                        <div class="field hidden" id="companyField"><label>Company name</label><input id="company"
+                                placeholder="Enter organisation name"></div>
+                        <div class="field-row">
+                            <div class="field"><label>Title</label><select id="title">
+                                    <option>Ms</option>
+                                    <option>Mr</option>
+                                    <option>Mrs</option>
+                                    <option>Dr</option>
+                                    <option>Prof</option>
+                                </select></div>
+                            <div class="field"><label>First name</label><input id="first" required maxlength="60" autocomplete="given-name"></div>
+                        </div>
+                        <div class="field"><label>Last name</label><input id="last" required maxlength="60" autocomplete="family-name"></div>
+                        <div class="field-row">
+                            <div class="field"><label>Country</label><input id="country" value="South Africa" required>
+                            </div>
+                            <div class="field"><label>Highest qualification</label><select id="qualification">
+                                    <option>Matric / Grade 12</option>
+                                    <option>Certificate</option>
+                                    <option>Diploma</option>
+                                    <option>Degree</option>
+                                    <option>Postgraduate</option>
+                                    <option>Other</option>
+                                </select></div>
+                        </div>
+                        <div class="field"><label>Email address</label><input id="regemail" type="email" required maxlength="254" autocomplete="email" inputmode="email"></div>
+                        <div class="field-row">
+                            <div class="field"><label>Password</label><input id="regpass" type="password" minlength="8" maxlength="72" autocomplete="new-password" placeholder="8+ characters, letters and a number"
+                                    required></div>
+                            <div class="field"><label>Confirm password</label><input id="confpass" type="password" maxlength="72" autocomplete="new-password"
+                                    minlength="8" required></div>
+                        </div><div class="form-error" id="registerError" role="alert"></div><button class="btn full">Create account →</button>
+                    </form>
+                    <p style="text-align:center"><a href="#" onclick="showAuth('login');return false">← Back to sign
+                            in</a></p>
+                </div>
+                <div id="resetform" class="hidden">
+                    <h2>Reset your password</h2>
+                    <p class="muted intro">Enter the email address used to create your account and we will email you a reset link.</p><div class="form-error" id="resetError" role="alert"></div><div class="form-ok" id="resetNotice" role="status"></div>
+                    <div id="resetEmailStage">
+                        <form onsubmit="requestPasswordReset(event)">
+                            <div class="field"><label>Email address</label><input type="email" id="resetemail" required placeholder="Enter your email address"></div>
+                            <button class="btn full">Continue →</button>
+                        </form>
+                    </div>
+                    <div id="resetPasswordStage" class="hidden">
+                        <p class="muted">Choose a new password below.</p>
+                        <form onsubmit="completePasswordReset(event)">
+                            <div class="field"><label>New password</label><input type="password" id="newresetpass" minlength="8" required autocomplete="new-password"></div>
+                            <div class="field"><label>Confirm new password</label><input type="password" id="confirmresetpass" minlength="8" required autocomplete="new-password"></div>
+                            <button class="btn full">Save new password →</button>
+                        </form>
+                    </div>
+                    <p><a href="#" onclick="showAuth('login');return false">← Back to sign in</a></p>
+                </div>
+                <div class="auth-footer">A Sustainable Impact Organisation<br>1166 Bronkhorstspruit Road, Swartkoppies,
+                    Pretoria<br>081 576 6197 · <a href="mailto:admin@csdsa.org.za">Email CSDSA</a></div>
+            </div>
+        </div>
+    </section>
+    <div id="portal" class="hidden">
+        <header class="topbar">
+            <div class="brand"><img class="brand-logo" src="csdsa-logo.png" alt="CSDSA — Centre for Sustainable Development, South Africa"></div>
+            <div class="top-actions"><button class="btn small outline" onclick="page('wallet')">Payments</button><span class="muted" id="topname"></span><span class="avatar"
+                    id="initials">CS</span><button class="btn small outline" onclick="logout()">Log out</button></div>
+        </header>
+        <div class="app-shell">
+            <aside><button class="navbtn active" data-page="home" onclick="page('home')">⌂ &nbsp;
+                    Dashboard</button><button class="navbtn" data-page="courses" onclick="page('courses')">▤ &nbsp; My
+                    courses</button><button class="navbtn" data-page="quiz" onclick="page('quiz')">✓ &nbsp; Assessments</button><button class="navbtn" data-page="calendar" onclick="page('calendar')">▦ &nbsp;
+                    Training calendar</button><button class="navbtn" data-page="webinars" onclick="page('webinars')">▶ &nbsp; Webinars</button><button class="navbtn" data-page="membership" onclick="page('membership')">✦ &nbsp; Membership & info</button><button class="navbtn" data-page="payments" onclick="page('payments')">↗ &nbsp; My payment requests</button><button class="navbtn" data-page="wallet" onclick="page('wallet')">▣
+                    &nbsp; Payments & wallet</button>
+                <div class="side-label">ACCOUNT</div><button class="navbtn" data-page="team" onclick="page('team')">♙
+                    &nbsp; Organisation management</button><button class="navbtn" data-page="profile"
+                    onclick="page('profile')">⚙ &nbsp; My profile</button>
+                <button class="navbtn" data-page="admin" onclick="page('admin')">✓ &nbsp; Payment approvals</button>
+            </aside>
+            <main id="content"></main>
+        </div>
+    </div>
+    <div class="float-links"><a href="https://wa.me/27815766197" target="_blank" rel="noopener noreferrer"
+            title="Chat with CSDSA on WhatsApp">✆</a><a href="mailto:admin@csdsa.org.za"
+            title="Email CSDSA">✉</a><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
+            title="Facebook">f</a></div>
+    <script>window.CSDSA_PAYMENT_CONFIG = { pageTabId: "CSDSA-LEARNING-ACADEMY", payShapId: "0815766197", fees: {} };</script>
+    <script>
+        const COURSE_PHOTO = 'handwashing.jpg', WEBINAR_PHOTO = 'handwashing.jpg';
+        const FALLBACK_IMG = 'handwashing.jpg';
+        function photoFallback(img) { img.onerror = null; img.src = FALLBACK_IMG; }
+        const COURSE_TITLE = 'Food Safety & Hygiene for Food Handlers in Manufacturing';
+        const SYLLABUS = [{"title": "Food safety, the law and your role", "duration": "45 minutes", "regs": "R638 regs 1, 3, 4, 10(1), 15", "outcomes": "Explain food safety, who is a food handler, legal duties and what can happen when R638 is broken."}, {"title": "Hazards and contamination", "duration": "45 minutes", "regs": "R638 reg 1 and reg 5(2)(b)", "outcomes": "Identify biological, chemical, physical and allergen hazards; explain the danger zone and cross-contamination."}, {"title": "Personal hygiene and handwashing", "duration": "45 minutes including practical", "regs": "R638 regs 1, 5(3)(d)(ii), 10(9), 10(14), 11(1)", "outcomes": "Wash hands and forearms to the elbow, follow handwashing triggers and meet nail, jewellery and bare-hand rules."}, {"title": "Health, illness and wounds", "duration": "30 minutes", "regs": "R638 regs 10(15), 11(2)", "outcomes": "Report relevant symptoms, explain return-to-work rules and cover wounds correctly."}, {"title": "Protective clothing and site behaviour", "duration": "45 minutes including practical", "regs": "R638 regs 9, 10(9)–(13), 11(3)", "outcomes": "Wear protective clothing correctly and recognise prohibited behaviour in food areas."}, {"title": "Premises, pests and waste", "duration": "30 minutes plus walkabout", "regs": "R638 regs 5, 10(3)–(8)", "outcomes": "Spot premises defects, report pests and handle refuse without contaminating food."}, {"title": "Equipment, cleaning and containers", "duration": "45 minutes including practical", "regs": "R638 regs 6(1)–(4), 6(8)–(9), 7", "outcomes": "Inspect food-contact equipment, follow cleaning procedures and reject damaged packaging."}, {"title": "Storage and temperature control", "duration": "60 minutes including practical", "regs": "R638 reg 6(5), reg 8, Annexures E and G", "outcomes": "Store food correctly, apply temperature limits, take and record readings, and follow thawing rules."}, {"title": "Allergens, foreign matter and CCPs", "duration": "45 minutes", "regs": "R638 reg 1, reg 5(2)(b), reg 5(3)(b)(ii), reg 11(1)(c)(viii)", "outcomes": "Prevent allergen cross-contact, follow foreign-matter controls and respond to CCP deviations."}, {"title": "Records, traceability and recall", "duration": "30 minutes", "regs": "R638 regs 10(16)–(18)", "outcomes": "Complete records accurately and explain batch traceability and recall."}];
+        const MEMBER_TOPICS = ['Basic hygiene principles', 'Handwashing step by step', 'Cleaning and sanitising sequence', 'Temperature control quick reference', 'Allergen control essentials', 'Daily pre-start hygiene checklist', 'Record-keeping tips'];
+        let user = null, cfg = null, access = null, lastResult = null, certificate = null, payments = [], employees = [];
+        let tokens = null, refreshing = null, resetToken = null, currentPayment = null, currentRequest = null, selectedWebinar = null, navToken = 0;
+        const $ = id => document.getElementById(id);
+        const money = n => 'R' + Number(n).toFixed(2);
+        function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+        const fee = k => ((window.CSDSA_PAYMENT_CONFIG || {}).fees || {})[k];
+        function setFees(f) { window.CSDSA_PAYMENT_CONFIG = window.CSDSA_PAYMENT_CONFIG || {}; window.CSDSA_PAYMENT_CONFIG.fees = { COURSE_FEE: f.course, MEMBERSHIP_FEE: f.membership, WEBINAR_FEE_1: f.webinar, ASSESSMENT_FEE: f.assessment }; }
+        const payShapId = () => (cfg && cfg.payShapId) || (window.CSDSA_PAYMENT_CONFIG || {}).payShapId || '';
+        const heading = (title, sub) => `<div class="pagehead"><div><div class="eyebrow">CSDSA Learning Academy</div><h1>${title}</h1><p>${sub}</p></div></div>`;
+        const dateText = d => d ? new Date(d).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+        const statusText = r => r.status === 'pending' ? (r.submitted ? 'Awaiting verification' : 'Awaiting payment') : (r.status === 'paid' || r.status === 'approved') ? 'Approved' : r.status === 'rejected' ? 'Rejected' : r.status;
+        const pendingCount = () => payments.filter(r => r.status === 'pending').length;
+
+        const RX = { email: /^([a-z0-9!#$%&'*+/=?^_`{|}~.-]+)@((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24})$/, name: /^[\p{L}][\p{L}\p{M}' .-]{1,59}$/u, company: /^[\p{L}\p{N}][\p{L}\p{N}\p{M} &'.,()/-]{1,99}$/u, country: /^[\p{L}][\p{L}\p{M} '.-]{1,59}$/u };
+        function normEmail(v) { const e = String(v || '').trim().toLowerCase(); const m = e.match(RX.email); if (!m || e.length > 254) return null; const l = m[1]; if (l.length > 64 || l.startsWith('.') || l.endsWith('.') || l.includes('..')) return null; return e; }
+        function normPhone(v) {
+            let p = String(v || '').trim().replace(/[\s().-]/g, ''); if (!p) return null;
+            if (p.startsWith('00')) p = '+' + p.slice(2); else if (/^27\d{9}$/.test(p)) p = '+' + p; else if (/^0\d{9}$/.test(p)) p = '+27' + p.slice(1);
+            if (!/^\+[1-9]\d{7,14}$/.test(p)) return null; if (p.startsWith('+27') && !/^\+27[678]\d{8}$/.test(p)) return null; return p;
+        }
+        const pwOk = s => typeof s === 'string' && s.length >= 8 && s.length <= 72 && /[A-Za-z]/.test(s) && /\d/.test(s);
+        const PW_RULE = 'Use 8 to 72 characters with at least one letter and one number.';
+        function showMsg(id, msg) { const el = $(id); if (!el) return; el.textContent = msg || ''; el.classList.toggle('show', !!msg); }
+        async function busy(e, fn) { const b = e && (e.submitter || (e.target && e.target.querySelector && e.target.querySelector('button'))); if (b) { if (b.disabled) return; b.disabled = true; } try { return await fn(); } finally { if (b) b.disabled = false; } }
+
+        function loadTokens() { try { tokens = JSON.parse(localStorage.getItem('csdsaSession') || sessionStorage.getItem('csdsaSession') || 'null'); } catch (_) { tokens = null; } }
+        function storeTokens(t, remember) { tokens = t; try { localStorage.removeItem('csdsaSession'); sessionStorage.removeItem('csdsaSession'); if (t) (remember ? localStorage : sessionStorage).setItem('csdsaSession', JSON.stringify(t)); } catch (_) { } }
+        const DB_KEY = 'csdsaData', DFEES = { course: 300, membership: 99, webinar: 50, assessment: 50 };
+        function saId(s) { if (!/^\d{13}$/.test(s)) return false; const mm = +s.slice(2, 4), dd = +s.slice(4, 6); if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return false; let t = 0; for (let i = 0; i < 13; i++) { let d = +s[i]; if (i % 2) { d *= 2; if (d > 9) d -= 9; } t += d; } return t % 10 === 0; }
+        function normId(v) { const s = String(v || '').toUpperCase().replace(/[\s-]/g, ''); if (/^\d{13}$/.test(s)) return saId(s) ? s : null; if (/^(?=.*[A-Z])(?=.*\d)[A-Z0-9]{6,9}$/.test(s)) return s; return null; }
+        async function api(path, { method = 'GET', body = {}, auth = true } = {}) {
+            const h = { 'Content-Type': 'application/json' }; if (auth && tokens) h.Authorization = 'Bearer ' + tokens.access_token;
+            let r; try { r = await fetch('/api', { method: 'POST', headers: h, body: JSON.stringify({ path, method, body }) }); } catch (_) { throw Object.assign(new Error('Could not reach CSDSA. Check your connection and try again.'), { status: 0 }); }
+            const j = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(j.error || 'Something went wrong.'), { status: r.status }); return j;
+        }
+        async function refreshMe() {
+            const me = await api('/me');
+            access = me.access; lastResult = me.lastResult; certificate = me.certificate; payments = me.payments; employees = me.employees;
+            user = { ...me.user, enrolled: access.course, quiz: !!lastResult, membershipActive: access.membership, assessmentPaid: access.assessment.paid, webinarAccess: access.webinars, paymentRequests: payments, employees };
+        }
+        async function startSession() { await refreshMe(); enter(); }
+
+        function showAuth(which) {
+            ['login', 'register', 'reset'].forEach(x => $(x + 'form').classList.toggle('hidden', x !== which));
+            if (which === 'reset') { $('resetEmailStage').classList.toggle('hidden', !!resetToken); $('resetPasswordStage').classList.toggle('hidden', !resetToken); }
+            ['loginError', 'registerError', 'resetError', 'resetNotice'].forEach(id => showMsg(id, ''));
+        }
+        async function login(e) {
+            e.preventDefault(); showMsg('loginError', ''); showMsg('loginNotice', '');
+            const id = $('loginemail').value.trim(), pw = $('loginpass').value;
+            if (!id || !pw) return showMsg('loginError', 'Enter your email, ID / passport or cellphone number and your password.');
+            if (id.includes('@') ? !normEmail(id) : !(normPhone(id) || normId(id))) return showMsg('loginError', id.includes('@') ? 'Enter a valid email address.' : 'Enter a valid email, ID / passport number or cellphone number.');
+            await busy(e, async () => { try { const r = await api('/auth/login', { method: 'POST', body: { identifier: id, password: pw }, auth: false }); storeTokens(r.session, $('remember').checked); await startSession(); } catch (err) { showMsg('loginError', err.message); } });
+        }
+        async function register(e) {
+            e.preventDefault(); showMsg('registerError', '');
+            const v = id => $(id).value.trim(); const fail = m => showMsg('registerError', m);
+            const type = $('acct').value, first = v('first'), last = v('last'), email = normEmail(v('regemail')), country = v('country'), company = v('company'), pw = $('regpass').value;
+            if (!RX.name.test(first) || !RX.name.test(last)) return fail('Enter your first and last name using letters only.');
+            if (!email) return fail('Enter a valid email address, for example name@example.com.');
+            if (!RX.country.test(country)) return fail('Enter a valid country name.');
+            if (type === 'business' && !RX.company.test(company)) return fail('Enter your company name (2 to 100 characters).');
+            if (!pwOk(pw)) return fail(PW_RULE);
+            if (pw !== $('confpass').value) return fail('The two passwords do not match.');
+            await busy(e, async () => {
+                try {
+                    const r = await api('/auth/register', { method: 'POST', auth: false, body: { account_type: type, title: $('title').value, first_name: first, last_name: last, country, qualification: $('qualification').value, company_name: company, email, password: pw } });
+                    if (r.session) { storeTokens(r.session, false); await startSession(); } else { showAuth('login'); $('loginemail').value = email; showMsg('loginNotice', r.message); }
+                } catch (err) { fail(err.message); }
+            });
+        }
+        async function requestPasswordReset(e) {
+            e.preventDefault(); showMsg('resetError', ''); showMsg('resetNotice', '');
+            const email = normEmail($('resetemail').value); if (!email) return showMsg('resetError', 'Enter a valid email address.');
+            await busy(e, async () => { try { const r = await api('/auth/reset-request', { method: 'POST', body: { email }, auth: false }); showAuth('reset'); resetToken = r.resetCode; showAuth('reset'); showMsg('resetNotice', r.message); } catch (err) { showMsg('resetError', err.message); } });
+        }
+        async function completePasswordReset(e) {
+            e.preventDefault(); showMsg('resetError', '');
+            const pw = $('newresetpass').value; if (!pwOk(pw)) return showMsg('resetError', PW_RULE); if (pw !== $('confirmresetpass').value) return showMsg('resetError', 'The two passwords do not match.');
+            await busy(e, async () => { try { const r = await api('/auth/reset-complete', { method: 'POST', auth: false, body: { access_token: resetToken, password: pw } }); resetToken = null; showAuth('login'); showMsg('loginNotice', r.message); } catch (err) { showMsg('resetError', err.message); } });
+        }
+        function enter() {
+            $('auth').classList.add('hidden'); $('portal').classList.remove('hidden');
+            $('topname').textContent = user.name; $('initials').textContent = user.name.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase();
+            document.querySelector('[data-page="team"]').classList.toggle('hidden', user.type !== 'business');
+            document.querySelector('[data-page="admin"]').classList.toggle('hidden', !user.isAdmin);
+            page(user.mustChangePassword ? 'profile' : 'home');
+        }
+        function logout() { storeTokens(null); user = access = lastResult = certificate = null; payments = []; employees = []; $('portal').classList.add('hidden'); $('auth').classList.remove('hidden'); showAuth('login'); }
+
+        async function page(which) {
+            if (!user) return;
+            if (user.mustChangePassword && which !== 'profile') which = 'profile';
+            document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('active', b.dataset.page === which));
+            const c = $('content'), mine = ++navToken; c.innerHTML = '<div class="panel"><p class="muted">Loading…</p></div>';
+            try {
+                await refreshMe(); if (mine !== navToken) return;
+                const fn = ROUTES[which]; if (fn) await fn(c); else renderLegacy(which);
+            } catch (err) {
+                if (err.status === 401) return logout();
+                if (mine === navToken) c.innerHTML = heading('Something went wrong', '') + `<div class="panel"><div class="notice">${esc(err.message)}</div><button class="btn" onclick="page('home')">Back to dashboard</button></div>`;
+            }
+            window.scrollTo(0, 0);
+        }
+        const lockedBox = (title, text, btn) => `<div class="panel"><h2>${title}</h2><p>${text}</p>${btn || ''}</div>`;
+
+        function renderLegacy(which) {
+            const c = $('content'); const courseTitle = COURSE_TITLE; const modules = SYLLABUS;
+            const course = `<div class="course-card"><img src="${COURSE_PHOTO}" alt="Food safety training in manufacturing" onerror="photoFallback(this)"><div class="course-content"><div class="tags"><span class="tag">R638 ALIGNMENT</span><span class="tag">10 MODULES</span><span class="tag">MANUFACTURING</span></div><h3>${courseTitle}</h3><p>Practical food-handler training aligned to Regulation R638 of 22 June 2018, written in plain language for short on-site sessions. Covers personal hygiene, contamination, premises, equipment, temperature control, allergens, records and traceability.</p><div class="muted" style="font-size:12px">◷ 7 hours of listed module time, plus practical activities &nbsp; · &nbsp; English</div><div class="course-bottom"><div><div class="price">${money(fee('COURSE_FEE'))}</div><div class="fine">One-time course access</div></div><button class="btn" onclick="page('detail')">View course details →</button></div></div></div>`;
+            if (which === 'home') c.innerHTML = heading('Welcome, ' + esc(user.name.split(' ')[0]), 'Manage your learning and explore available training.') + `<div class="stats"><div class="stat"><span>Courses enrolled</span><strong>${user.enrolled ? 1 : 0}</strong></div><div class="stat"><span>Pending payments</span><strong>${pendingCount()}</strong></div><div class="stat"><span>Training assessments</span><strong>${user.quiz ? 1 : 0}</strong></div></div><h2 class="sectiontitle">Featured training</h2>` + course;
+            if (which === 'courses') c.innerHTML = heading('My courses', 'Your enrolled training and the current course catalogue.') + (user.enrolled ? `<div class="notice">You are enrolled in Food Safety & Hygiene for Food Handlers in Manufacturing. <a href="#" onclick="page('learn');return false">Continue learning →</a></div>` : '') + course;
+            if (which === 'detail') c.innerHTML = `<div class="crumb"><a href="#" onclick="page('courses');return false">Courses</a> / Manufacturing food safety</div><div class="detail-grid"><div><img class="detail-img" src="${COURSE_PHOTO}" alt="Food safety training for manufacturing food handlers" onerror="photoFallback(this)"><div class="panel"><div class="eyebrow">Course overview</div><h1>${courseTitle}</h1><p><b>Aligned to Regulation R638 of 22 June 2018.</b> Ten modules train factory food handlers in the duties they must understand and act on, using plain language for delivery as short sessions on site.</p><p>This course combines knowledge checks with practical observation and workplace evidence. Site-specific lines must be completed by the client factory before delivery. The legal wording and any regulatory references should be checked against the official Gazette before formal training.</p><h3>Learning outcomes</h3><ul class="outline-list"><li>Understand food-handler responsibilities under R638.</li><li>Identify hazards and prevent contamination and allergen cross-contact.</li><li>Apply handwashing, health reporting, protective clothing and site behaviour rules.</li><li>Inspect premises, pest controls, cleaning, equipment and packaging.</li><li>Store food safely and take, record and act on temperature readings.</li><li>Respond to CCP deviations and maintain traceability and recall records.</li></ul><h3>Ten-module curriculum</h3>${modules.map((m,i)=>`<details class="lesson" style="display:block;padding:14px 16px"><summary style="cursor:pointer;font-weight:700"><b>${String(i+1).padStart(2,'0')}</b> &nbsp; ${esc(m.title)} <span class="muted">· ${esc(m.duration)}</span></summary><p><b>R638 references:</b> ${esc(m.regs)}</p><p><b>Learners should be able to:</b> ${esc(m.outcomes)}</p></details>`).join('')}<p class="fine">The full lesson content opens in your learning workspace after you enrol.</p><h3>Assessment and training records</h3><p>Use three knowledge-check questions per module, in the learner’s language where possible, plus practical observations for handwashing, gowning, station cleaning, temperature readings, record completion and CCP response. Record attendance, scores, practical checklists, competence sign-off, impact checks 4–6 weeks later, follow-up training and annual refreshers.</p><p><b>Proposed pass criteria:</b> all three knowledge-check questions correct per module (same-day retest allowed) and every required practical observed as competent.</p><div class="notice">Trainer note: the supplied course notes distinguish R638 requirements from best-practice material and flag some items for official verification. Accreditation and certification are not confirmed by CSDSA on this page.</div></div><div class="panel"><h3>Course information</h3><div class="price" style="margin:12px 0">${money(fee('COURSE_FEE'))}</div><p class="fine">One-time course access · Pay by PayShap after you press Enrol.</p><button class="btn full" onclick="purchase('course')">${user.enrolled ? 'Continue learning' : 'Enrol / Buy course'} →</button><div class="payrow"><span>Format</span><b>Online / site-led sessions</b></div><div class="payrow"><span>Modules</span><b>10</b></div><div class="payrow"><span>Regulatory alignment</span><b>R638 · 22 Jun 2018</b></div><div class="payrow"><span>Assessment</span><b>Knowledge + practical</b></div><div class="payrow"><span>Course date</span><b>Self-paced</b></div><p class="fine">Course price, delivery format and trainer details should be confirmed by CSDSA before sale or formal delivery.</p></div></div></div>`;
+            if (which === 'calendar') c.innerHTML = heading('Training calendar', 'Upcoming training and learning schedules.') + `<div class="panel"><h3>Basic Food Safety & Hygiene</h3><p>Self-paced e-learning — start any time after enrolment. There are no fixed class dates for this course.</p><div class="lesson"><span>Online course access</span><b>On demand</b></div><div class="lesson"><span>Assessment fee</span><b>${money(((window.CSDSA_PAYMENT_CONFIG||{}).fees||{}).ASSESSMENT_FEE ?? 50)}</b></div><button class="btn" onclick="page('webinars')">View webinars →</button></div>`;
+            if (which === 'webinars') c.innerHTML = heading('Webinars', 'Watch webinars within the CSDSA site. Each webinar is purchased separately from membership.') + `<div class="notice">Explore the Food Safety Essentials webinar, review the details and enrol when you are ready.</div><div class="course-card"><img src="${WEBINAR_PHOTO}" alt="Online food safety training webinar" onerror="photoFallback(this)"><div class="course-content"><div class="tags"><span class="tag">LIVE / RECORDED</span><span class="tag">PURCHASE SEPARATELY</span></div><h3>Food Safety Essentials Webinar</h3><p>Build practical confidence in food handling, everyday hygiene routines and contamination prevention. Learn key principles you can apply in food-service and workplace settings.</p><div class="course-bottom"><div><div class="price">${(window.CSDSA_PAYMENT_CONFIG && window.CSDSA_PAYMENT_CONFIG.fees && window.CSDSA_PAYMENT_CONFIG.fees.WEBINAR_FEE_1) ? money((window.CSDSA_PAYMENT_CONFIG && window.CSDSA_PAYMENT_CONFIG.fees && window.CSDSA_PAYMENT_CONFIG.fees.WEBINAR_FEE_1)) : 'R50.00'}</div><div class="fine">One webinar · Separate purchase</div></div><button class="btn" onclick="openWebinar('food-safety-essentials','Food Safety Essentials Webinar','WEBINAR_FEE_1')">View webinar →</button></div></div></div>`;
+        }
+
+        async function renderLearn(c) {
+            if (!access.course) { c.innerHTML = heading(COURSE_TITLE, 'Your learning workspace') + lockedBox('Enrol to open the modules', 'The ten course modules are available after your course payment is verified.', `<button class="btn" onclick="purchase('course')">Enrol / Buy course · ${money(fee('COURSE_FEE'))} →</button>`); return; }
+            const { modules } = await api('/content/course');
+            c.innerHTML = heading(COURSE_TITLE, 'Your learning workspace · ten modules aligned to the supplied R638 course outline.') + `<div class="panel"><div class="eyebrow">Course pathway</div><h2>${COURSE_TITLE}</h2><p>Work through each module with your trainer or supervisor. Complete the knowledge check and practical evidence where required. Your organisation’s site-specific procedures take priority where they set stricter controls.</p><div class="notice">R638 compliance note: trainers should verify selected wording against the official Gazette No. 41730 before delivery. This course is learning support, not legal advice or a confirmation of accreditation.</div>${modules.map((m, i) => `<details class="lesson" style="display:block;padding:14px 16px;margin:10px 0"><summary style="cursor:pointer;font-weight:700"><b>Module ${String(i + 1).padStart(2, '0')}</b> · ${esc(m.title)} <span class="muted">(${esc(m.duration)})</span></summary><p><b>Regulation references:</b> ${esc(m.regs)}</p><p><b>Learning outcomes:</b> ${esc(m.outcomes)}</p><p>${esc(m.content)}</p><p><b>Knowledge check:</b> ${esc(m.check)}</p><p class="fine">Trainer evidence: record the learner’s response and complete any required practical observation for this module.</p></details>`).join('')}</div><div class="panel"><h3>Knowledge assessment</h3><p>When you are ready, take the 30-question assessment. It is paid for separately.</p><button class="btn" onclick="page('quiz')">Go to assessments →</button></div>`;
+        }
+        async function renderFree(c) {
+            const { content } = await api('/content/free');
+            c.innerHTML = heading(esc(content.title), 'Free introductory information.') + `<div class="panel">${content.body.map(p => `<p>${esc(p)}</p>`).join('')}<button class="btn" onclick="page('membership')">See membership & assessment →</button></div>`;
+        }
+
+        async function renderQuiz(c, resultHtml = '') {
+            const a = access.assessment, awaiting = payments.find(r => r.type === 'assessment' && r.status === 'pending' && r.submitted && !r.beneficiaryId);
+            let body = `<div class="panel"><div class="eyebrow">ASSESSMENT</div><h2>${COURSE_TITLE}</h2><p><b>Topic:</b> Food safety &amp; hygiene, covering all ten course modules (Regulation R638 of 22 June 2018). 30 multiple-choice questions. Pass mark ${cfg ? cfg.passMark : 80}%. Each payment includes ${a.attemptsMax} attempt${a.attemptsMax === 1 ? '' : 's'}. This online check does not replace practical observation and trainer sign-off.</p><div class="price" style="margin:12px 0">Assessment fee: ${money(fee('ASSESSMENT_FEE'))}</div>`;
+            if (!a.paid || !a.canAttempt) {
+                body += a.paid ? `<div class="notice"><b>Attempts used.</b> You have used all ${a.attemptsMax} attempts for your last payment. Pay the assessment fee again to retry.</div>` : (awaiting ? `<div class="notice"><b>Payment awaiting verification.</b> The questions unlock as soon as CSDSA verifies your payment.</div><button class="btn outline" onclick="page('payments')">Check payment status →</button>` : `<div class="notice">The questions are shown only after you pay the assessment fee and the payment is verified.</div>`);
+                if (!awaiting) body += `<button class="btn" onclick="startPayment('assessment','Food Safety & Hygiene Assessment','ASSESSMENT_FEE')">Pay assessment fee ${money(fee('ASSESSMENT_FEE'))} →</button>`;
+            } else body += `<div class="notice"><b>Payment verified.</b> Attempts used: ${a.attemptsUsed} of ${a.attemptsMax}.</div><button class="btn" onclick="startAssessment()">Start assessment →</button>`;
+            body += '</div>';
+            if (lastResult) body += `<div class="panel"><h3>Your latest result</h3><p>${lastResult.score}/${lastResult.total} (${Math.round(lastResult.percentage)}%) · ${lastResult.passed ? 'Passed' : 'Not passed'} · ${dateText(lastResult.completed_at)}</p>${certificate ? `<button class="btn outline" onclick="page('certificate')">View certificate →</button>` : ''}</div>`;
+            c.innerHTML = heading('Assessments', 'Food Safety & Hygiene for Food Handlers in Manufacturing · 30 questions') + resultHtml + body;
+        }
+        async function startAssessment() {
+            const c = $('content');
+            try {
+                const d = await api('/assessment');
+                c.innerHTML = heading('Knowledge assessment', `${COURSE_TITLE} · Attempt ${d.attemptsUsed + 1} of ${d.attemptsMax}`) + `<div class="panel"><div id="quizError" class="form-error" role="alert"></div><form onsubmit="submitAssessment(event)">${d.questions.map((q, i) => `<section class="assessment-question" style="padding:14px 0;border-bottom:1px solid var(--line,#dce5df)"><h3>Question ${i + 1} of ${d.questions.length}</h3><p>${esc(q.q)}</p>${q.options.map((o, j) => `<p><label><input type="radio" name="q${i}" value="${j}" required> ${esc(o)}</label></p>`).join('')}</section>`).join('')}<br><button class="btn">Submit assessment</button></form></div>`;
+                window.scrollTo(0, 0);
+            } catch (err) { await refreshMe().catch(() => { }); await renderQuiz(c, `<div class="notice">${esc(err.message)}</div>`); }
+        }
+        async function submitAssessment(e) {
+            e.preventDefault(); const answers = []; const fd = new FormData(e.target);
+            for (let i = 0; i < 30; i++) { const v = fd.get('q' + i); if (v === null) return showMsg('quizError', `Answer question ${i + 1} before submitting.`); answers.push(Number(v)); }
+            if (!confirm('Submit your answers? You cannot change them afterwards.')) return;
+            await busy(e, async () => {
+                try {
+                    const r = await api('/assessment/submit', { method: 'POST', body: { answers } }); await refreshMe();
+                    $('content').innerHTML = heading('Assessment completed', COURSE_TITLE) + `<div class="panel"><h2>Your score: ${r.score}/${r.total} (${Math.round(r.percentage)}%)</h2><p><b>${r.passed ? 'Passed' : 'Not passed'}</b> · pass mark ${r.passMark}%.</p>${r.passed ? `<div class="notice">Well done. Your certificate has been issued.${r.certificate && r.certificate.emailStatus === 'sent' ? ' It has been emailed to CSDSA.' : ''}</div><button class="btn" onclick="page('certificate')">View certificate →</button>` : `<p>${r.attemptsRemaining > 0 ? `You have ${r.attemptsRemaining} attempt${r.attemptsRemaining === 1 ? '' : 's'} left on this payment. Review the course modules, then try again.` : 'You have used all attempts for this payment. Review the course modules, then pay the assessment fee again to retry.'}</p><button class="btn" onclick="page('quiz')">Back to assessments</button>`}<p class="fine">Practical observations and trainer sign-off are still required for full course competence.</p></div>`;
+                    window.scrollTo(0, 0);
+                } catch (err) { showMsg('quizError', err.message); }
+            });
+        }
+        function renderCertificate(c) {
+            if (!certificate) { c.innerHTML = heading('Certificate', '') + lockedBox('No certificate yet', 'A certificate is issued when you pass the assessment.', `<button class="btn" onclick="page('quiz')">Go to assessments →</button>`); return; }
+            const url = `${location.href.split(/[?#]/)[0]}?verify=${certificate.verifyToken}`;
+            c.innerHTML = heading('Your certificate', 'Print this page or save it as a PDF.') + `<div class="panel" id="certPrint" style="text-align:center;border:3px double #087443;padding:42px 28px"><img class="brand-logo" src="csdsa-logo.png" alt="CSDSA" style="max-width:240px;margin:0 auto 18px"><div class="eyebrow">CERTIFICATE OF ASSESSMENT COMPLETION</div><p>This certifies that</p><h1 style="margin:8px 0">${esc(certificate.learner)}</h1><p>passed the online knowledge assessment for</p><h2>${esc(certificate.course)}</h2><p>Score: <b>${certificate.score}/${certificate.total}</b> · Issued ${dateText(certificate.issuedAt)}</p><p>Certificate number: <b>${esc(certificate.number)}</b></p>${certificate.signStatus === 'signed' ? `<p><b>Signed by CSDSA</b> · ${dateText(certificate.signedAt)}</p>` : ''}<p class="fine">Verify at ${esc(url)}<br>This certificate records the online knowledge assessment only. Practical observation and trainer sign-off are recorded separately. Accreditation is not implied.</p></div><button class="btn" onclick="window.print()">Print / save as PDF</button><div class="panel" style="margin-top:18px"><h3>Certification</h3><div class="payrow"><span>Course paid and verified</span><b>${access.course ? '✓' : '—'}</b></div><div class="payrow"><span>Assessment paid and verified</span><b>${access.assessment.paid || certificate ? '✓' : '—'}</b></div><div class="payrow"><span>Assessment passed (80% or more)</span><b>✓</b></div><div class="payrow"><span>Signature</span><b>${certificate.signStatus === 'signed' ? 'Signed' : certificate.signStatus === 'requested' ? 'Requested' : 'Not requested'}</b></div>${certificate.signStatus === 'signed' ? '' : `<div class="field"><label>Email the certificate to be signed</label><input id="signTo" value="admin@csdsa.org.za"></div><button class="btn" onclick="requestSignature()">Email for signature</button>`}</div>`;
+        }
+
+        async function renderMembership(c) {
+            const m = fee('MEMBERSHIP_FEE'), pend = payments.find(r => r.type === 'membership' && r.status === 'pending' && r.submitted);
+            const row = (t, tag) => `<div class="lesson"><span>${esc(t)}</span><b>${tag}</b></div>`;
+            let status;
+            if (access.membership) status = `<div class="notice"><b>Membership status: ACTIVE</b><p>Active until ${dateText(access.membershipExpiresAt)}. Renew before then to keep access without a gap.</p></div><button class="btn" onclick="page('memberinfo')">Open member library →</button> <button class="btn outline" onclick="startPayment('membership','CSDSA Information Membership','MEMBERSHIP_FEE')">Renew for another month ${money(m)} →</button>`;
+            else if (pend) status = `<div class="notice"><b>Membership status: PAYMENT AWAITING VERIFICATION</b><p>Your payment has been submitted. Access unlocks after CSDSA verifies it.</p></div><button class="btn outline" onclick="page('payments')">Check payment status →</button>`;
+            else status = `<div class="notice"><b>Membership status: NOT ACTIVE</b><p>Membership is ${money(m)} per month and gives you the member information library below. It does not renew automatically; renew each month by paying again.</p></div><button class="btn" onclick="startPayment('membership','CSDSA Information Membership','MEMBERSHIP_FEE')">Pay membership fee ${money(m)} by PayShap →</button>`;
+            c.innerHTML = heading('Membership & information', 'Free introduction, a separately priced assessment and a paid member library. Webinars are purchased separately.') + `<div class="panel"><div class="eyebrow">FREE ACCESS</div><h2>Start learning at no cost</h2>${row('Introduction to food safety', 'Free')}<button class="btn outline" onclick="page('freeinfo')">Open free information →</button></div><div class="panel"><div class="eyebrow">ASSESSMENT · SEPARATE FEE</div><h2>Food safety &amp; hygiene knowledge assessment</h2>${row('Knowledge assessment (30 questions)', money(fee('ASSESSMENT_FEE')))}<p class="fine">Paid once per attempt bundle. Not included in membership.</p><button class="btn outline" onclick="page('quiz')">View assessment →</button></div><div class="panel"><div class="eyebrow">MEMBERSHIP</div><h2>Member information library</h2><div class="price" style="margin:12px 0">Membership fee: ${money(m)} per month</div><p>Members get:</p>${MEMBER_TOPICS.map(t => row(t, 'Members')).join('')}<br>${status}</div><div class="panel"><h3>Webinars are separate</h3><p>Each webinar has its own price and payment. A membership payment does not pay for a webinar.</p><button class="btn outline" onclick="page('webinars')">Browse webinars →</button></div>`;
+        }
+        async function renderMemberInfo(c) {
+            if (!access.membership) { c.innerHTML = heading('Member information library', 'Extended guidance for active members.') + lockedBox('Membership required', 'This library is available to paid members after payment verification.', `<button class="btn" onclick="page('membership')">View membership →</button>`); return; }
+            const { sections, expiresAt } = await api('/content/member-library');
+            c.innerHTML = heading('Member information library', `Active membership · until ${dateText(expiresAt)}`) + sections.map(s => `<div class="panel"><h2>${esc(s.title)}</h2>${(s.body || []).map(p => `<p>${esc(p)}</p>`).join('')}${s.list ? `<ul class="outline-list">${s.list.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}${s.note ? `<div class="notice">${esc(s.note)}</div>` : ''}</div>`).join('') + `<button class="btn outline" onclick="window.print()">Print this page</button>`;
+        }
+
+        function openWebinar(id, title, feeKey) { selectedWebinar = { id, title, feeKey }; page('webinarroom'); }
+        async function renderWebinarRoom(c) {
+            const w = selectedWebinar || { id: 'food-safety-essentials', title: 'Food Safety Essentials Webinar', feeKey: 'WEBINAR_FEE_1' };
+            let panel;
+            if (access.webinars.includes(w.id)) {
+                const d = await api('/content/webinar/' + encodeURIComponent(w.id));
+                panel = `<div class="panel"><h2>Webinar player</h2>${d.embedUrl ? `<div style="aspect-ratio:16/9"><iframe src="${esc(d.embedUrl)}" title="${esc(w.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="width:100%;height:100%;border:0;border-radius:12px"></iframe></div>` : `<div style="aspect-ratio:16/9;background:#17251f;color:white;display:grid;place-items:center;border-radius:12px;text-align:center;padding:20px"><div><div style="font-size:42px">▶</div><strong>The recording is not available yet</strong><p style="color:#d5e0d9">CSDSA will publish it here. You already have access.</p></div></div>`}</div>`;
+            } else {
+                const pend = payments.find(r => r.type === 'webinar' && r.itemId === w.id && r.status === 'pending' && r.submitted);
+                panel = lockedBox('Purchase this webinar separately', pend ? 'Your payment is awaiting verification. The webinar unlocks once CSDSA verifies it.' : 'You do not yet have access to this webinar. Membership does not include this purchase.', pend ? `<button class="btn outline" onclick="page('payments')">Check payment status →</button>` : `<button class="btn" onclick="startPayment('webinar',${esc(JSON.stringify(w.title))},${esc(JSON.stringify(w.feeKey))},${esc(JSON.stringify(w.id))})">Pay webinar fee ${money(fee(w.feeKey))} →</button>`);
+            }
+            c.innerHTML = heading(esc(w.title), 'Webinar viewing room hosted inside the CSDSA learning portal.') + panel;
+        }
+
+        function purchase() { if (user.enrolled) return page('learn'); startPayment('course', COURSE_TITLE, 'COURSE_FEE'); }
+        function startPayment(type, title, feeKey, webinarId = '', beneficiary = null) { currentPayment = { type, title, feeKey, webinarId, beneficiary }; page('eft'); }
+        function resumePayment(id) { const r = payments.find(x => x.id === id); if (!r) return; const emp = r.beneficiaryId && employees.find(x => x.id === r.beneficiaryId); currentPayment = { type: r.type, title: r.title, webinarId: r.type === 'webinar' ? r.itemId : '', beneficiary: emp ? { id: emp.id, name: emp.name } : null }; page('eft'); }
+        async function copyText(value, label) { try { if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(value); else { const b = document.createElement('textarea'); b.value = value; b.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(b); b.select(); const ok = document.execCommand('copy'); b.remove(); if (!ok) throw 0; } alert(label + ' copied.'); } catch (_) { window.prompt('Copy this ' + label.toLowerCase() + ':', value); } }
+        async function renderPay(c) {
+            const p = currentPayment; if (!p) return page('wallet');
+            let req; try { const r = await api('/payment-requests', { method: 'POST', body: { item_type: p.type, item_id: p.webinarId || undefined, beneficiary_user_id: p.beneficiary ? p.beneficiary.id : undefined } }); req = r.request; }
+            catch (err) { c.innerHTML = heading('Pay by PayShap', '') + `<div class="panel"><div class="notice">${esc(err.message)}</div><button class="btn outline" onclick="page('payments')">My payment requests</button> <button class="btn outline" onclick="page('home')">Dashboard</button></div>`; return; }
+            currentRequest = req;
+            const label = { course: 'Course enrolment', membership: 'Information membership (1 month)', assessment: 'Assessment fee', webinar: 'Individual webinar' }[req.type];
+            c.innerHTML = heading('Pay by PayShap', 'Each course, membership, assessment or webinar is paid for separately.') + `<div class="panel"><div class="eyebrow">PAYMENT FOR</div><h2>${esc(req.title)}</h2><div class="payrow"><span>Purchase type</span><b>${label}</b></div><div class="payrow"><span>Amount to pay</span><b>${money(req.amount)}</b></div>${req.submitted ? `<div class="notice"><b>Awaiting verification.</b> You have already submitted this payment. Access unlocks when CSDSA verifies it.</div><button class="btn outline" onclick="page('payments')">My payment requests →</button>` : `<ol><li>Open your banking app and choose PayShap.</li><li>Pay exactly <b>${money(req.amount)}</b> to the PayShap ID below.</li><li>Use the payment reference exactly as shown.</li><li>Return here, upload your proof of payment (PDF or photo) and press “I have paid”.</li></ol><div class="field"><label>Payment reference</label><input id="eftReference" readonly value="${esc(req.reference)}"></div><div class="payment-id"><div><div class="fine">PAYSHAP ID</div><strong id="payShapNumber">${esc(payShapId())}</strong></div><button type="button" class="btn outline" onclick="copyText(payShapId(),'PayShap ID')">Copy PayShap ID</button></div><div class="pay-actions"><button type="button" class="btn outline" onclick="copyText(currentRequest.reference,'Payment reference')">Copy payment reference</button></div><h3 style="margin-top:22px">After paying</h3><form onsubmit="submitPaid(event)" novalidate><div id="payError" class="form-error" role="alert"></div><div class="field"><label>Amount paid (R)</label><input id="eftAmount" inputmode="decimal" autocomplete="off" value="${Number(req.amount).toFixed(2)}" placeholder="e.g. ${Number(req.amount).toFixed(2)}"></div><div class="field"><label>Proof of payment (PDF or photo) — required</label><input type="file" id="eftProof" accept="application/pdf,image/*"></div><div class="field"><label>Optional note or bank proof reference</label><input id="eftNote" maxlength="160" placeholder="Do not enter card PINs or banking passwords"></div><button class="btn primary-pay full">I have paid. Submit for verification →</button></form><p class="fine">Pressing the button does not move money. CSDSA checks the payment against its bank records before unlocking access.</p>`}</div><button class="btn outline" onclick="page('wallet')">← Back</button>`;
+        }
+        function readProof(f) { return new Promise((ok, no) => { if (!f) return no(new Error('Upload your proof of payment (PDF or photo).')); const fr = new FileReader(); fr.onerror = () => no(new Error('That file could not be read.')); fr.onload = () => { const d = fr.result, t = (d.match(/^data:([^;]+);/) || [])[1] || ''; if (t === 'application/pdf') { if (f.size > 1.5e6) return no(new Error('The PDF must be under 1.5 MB.')); if (!d.startsWith('data:application/pdf;base64,JVBER')) return no(new Error('That PDF is not valid.')); return ok({ name: f.name, type: t, data: d }); } if (!/^image\/(jpeg|png|webp)$/.test(t)) return no(new Error('Upload a PDF, JPG or PNG file.')); const im = new Image(); im.onerror = () => no(new Error('That image is not valid.')); im.onload = () => { const k = Math.min(1, 1400 / Math.max(im.width, im.height)), cv = document.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k); cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); ok({ name: f.name, type: 'image/jpeg', data: cv.toDataURL('image/jpeg', 0.7) }); }; im.src = d; }; fr.readAsDataURL(f); }); }
+        async function submitPaid(e) {
+            e.preventDefault(); showMsg('payError', ''); const amt = $('eftAmount').value.trim().replace(/^R\s*/i, '').replace(',', '.');
+            if (!/^\d+(\.\d{1,2})?$/.test(amt) || Number(amt) <= 0) return showMsg('payError', 'Enter the amount you paid as a number, for example 50 or 50.00.');
+            if (Math.abs(Number(amt) - currentRequest.amount) > 0.001) return showMsg('payError', `The amount must be exactly ${money(currentRequest.amount)}. Check your payment.`);
+            await busy(e, async () => { try { const proof = await readProof($('eftProof').files[0]); await api(`/payment-requests/${currentRequest.id}/submit`, { method: 'POST', body: { amount: Number(amt), note: $('eftNote').value.trim(), proof } }); alert('Proof of payment received. Your access unlocks once CSDSA verifies it.'); page('payments'); } catch (err) { showMsg('payError', err.message); } });
+        }
+        function renderPayments(c) {
+            c.innerHTML = heading('My payment requests', 'Each purchase is separate. Access is granted only after CSDSA verifies the payment.') + `<div class="panel"><h2>Payment history</h2>${payments.length ? payments.map(r => `<div class="lesson"><div><b>${esc(r.title)}</b><div class="fine">${esc(r.reference)} · ${dateText(r.createdAt)}</div></div><div style="text-align:right"><b>${money(r.amount)}</b><div class="fine">${statusText(r)}</div>${r.status === 'pending' && !r.submitted ? `<button class="btn small" onclick="resumePayment('${esc(r.id)}')">Continue</button>` : ''}</div></div>`).join('') : '<p>No payment requests yet.</p>'}</div>`;
+        }
+        function renderWallet(c) {
+            c.innerHTML = heading('Payments & wallet', 'Courses, membership, assessments and webinars are paid for separately by PayShap.') + `<div class="stats"><div class="stat"><span>Pending payments</span><strong>${pendingCount()}</strong></div><div class="stat"><span>Approved purchases</span><strong>${payments.filter(r => r.status === 'approved' || r.status === 'paid').length}</strong></div></div><div class="panel"><h2>Choose what to pay for</h2><p>Membership, the assessment and each webinar are separate payments.</p><button class="btn" onclick="page('membership')">Information membership →</button> <button class="btn outline" onclick="page('quiz')">Assessment →</button> <button class="btn outline" onclick="page('webinars')">Browse webinars →</button> <button class="btn outline" onclick="page('payments')">My payment requests →</button></div>`;
+        }
+
+        async function renderTeam(c, notice = '') {
+            if (user.type !== 'business') { c.innerHTML = heading('Organisation management', '') + lockedBox('Available to business accounts', 'Register as a business to manage employee accounts.'); return; }
+            const avg = (() => { const v = employees.filter(e => e.lastScore !== null); return v.length ? Math.round(v.reduce((a, e) => a + e.lastScore, 0) / v.length / 30 * 100) + '%' : '—'; })();
+            c.innerHTML = heading('Organisation management', 'Enrol your employees and follow their progress. Each employee pays for and completes their own training from their own login.') + notice + `<div class="stats"><div class="stat"><span>Employees</span><strong>${employees.length}</strong></div><div class="stat"><span>Course unlocked</span><strong>${employees.filter(e => e.enrolled).length}</strong></div><div class="stat"><span>Assessments taken</span><strong>${employees.filter(e => e.quizCompleted).length}</strong></div><div class="stat"><span>Average score</span><strong>${avg}</strong></div></div>${newResultsNotice()}<div class="panel"><h3>Progress summary</h3><p class="fine">Download the current results for every employee to keep or share.</p><div class="pay-actions"><button type="button" class="btn outline" onclick="downloadTeamSummary('csv')">Download summary (Excel / CSV)</button> <button type="button" class="btn outline" onclick="downloadTeamSummary('pdf')">Print / save as PDF</button> <button type="button" class="btn outline" onclick="copyTeamSummary()">Copy summary</button></div></div><div class="detail-grid"><div class="panel"><h3>Employee directory</h3><table class="table"><thead><tr><th>Employee</th><th>Course</th><th>Last score</th><th></th></tr></thead><tbody>${employees.map((e, i) => `<tr><td><b>${esc(e.name)}</b><br><span class="fine">${esc(e.idNumber ? 'ID: ' + e.idNumber : (e.phone || e.email))}</span><br><span class="fine">${esc(e.jobTitle)}</span></td><td>${'Enrolled · ' + e.payState}</td><td>${e.lastScore === null ? '—' : Math.round(e.lastScore / 30 * 100) + '%' + (e.passed ? ' ✓' : '')}</td><td><button class="btn small outline" onclick="employeeDetails(${i})">Details</button></td></tr>`).join('') || '<tr><td colspan="4">No employees yet. Add your first employee using the form.</td></tr>'}</tbody></table><div id="employeeDetailsPanel"></div></div><div class="panel"><h3>Add employee</h3><p class="fine">Employees sign in with their ID / passport number (or cellphone, if added) and the temporary password, then choose their own password.</p><div id="empError" class="form-error" role="alert"></div><form onsubmit="addEmployee(event)" novalidate><div class="field"><label>Employee full name</label><input id="empname" maxlength="60" autocomplete="off"></div><div class="field"><label>Employee ID or passport number (required)</label><input id="empidnumber" placeholder="13-digit SA ID or passport number" autocomplete="off"></div><div class="field"><label>Employee cellphone number (optional)</label><input type="tel" id="empphone" inputmode="tel" placeholder="e.g. 0821234567" autocomplete="off"></div><div class="field"><label>Employee email (optional)</label><input type="email" id="empemail" placeholder="Leave blank if they have no email" autocomplete="off"></div><div class="field"><label>Job title</label><input id="empjobtitle" maxlength="80" placeholder="e.g. Food Handler"></div><div class="field"><label>Temporary password (optional)</label><input id="empPassword" placeholder="Leave blank to generate one" autocomplete="new-password"></div><button class="btn full">Create employee account</button></form></div></div>`;
+        }
+
+        function teamRows() {
+            return employees.map(e => ({
+                name: e.name, id: e.idNumber || e.phone || e.email || '', job: e.jobTitle || '',
+                course: 'Enrolled · ' + e.payState,
+                assessment: e.quizCompleted ? (e.passed ? 'Passed' : 'Not passed') : 'Outstanding',
+                score: e.lastScore === null ? '' : Math.round(e.lastScore / 30 * 100) + '%',
+                attempts: e.attempts || 0,
+                date: e.lastActive ? dateText(e.lastActive) : '',
+                cert: e.certNo || ''
+            }));
+        }
+        function newResultsNotice() {
+            const key = 'csdsaSeen_' + user.id, seen = (() => { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (_) { return {}; } })();
+            const fresh = employees.filter(e => e.lastActive && seen[e.id] !== e.lastActive);
+            const next = {}; employees.forEach(e => { if (e.lastActive) next[e.id] = e.lastActive; });
+            try { localStorage.setItem(key, JSON.stringify(next)); } catch (_) { }
+            if (!fresh.length) return '';
+            return `<div class="notice"><b>New assessment results</b><p>${fresh.map(e => `${esc(e.name)}: ${Math.round(e.lastScore / 30 * 100)}% (${e.passed ? 'passed' : 'not passed'})`).join('<br>')}</p></div>`;
+        }
+        function copyTeamSummary() {
+            const head = ['Employee', 'ID / contact', 'Job title', 'Course', 'Assessment', 'Last score', 'Attempts used', 'Last assessment date', 'Certificate number'];
+            const t = [head].concat(teamRows().map(r => [r.name, r.id, r.job, r.course, r.assessment, r.score, r.attempts, r.date, r.cert])).map(r => r.join('\t')).join('\n');
+            copyText(t, 'Summary');
+        }
+        function downloadTeamSummary(kind) {
+            const rows = teamRows(), company = user.company || 'Organisation', today = new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' });
+            if (kind === 'csv') {
+                const head = ['Employee', 'ID / contact', 'Job title', 'Course', 'Assessment', 'Last score', 'Attempts used', 'Last assessment date', 'Certificate number'];
+                const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+                const csv = '\ufeff' + [head].concat(rows.map(r => [r.name, r.id, r.job, r.course, r.assessment, r.score, r.attempts, r.date, r.cert])).map(r => r.map(q).join(',')).join('\r\n');
+                const name = 'CSDSA-training-summary-' + new Date().toISOString().slice(0, 10) + '.csv';
+                const a = document.createElement('a'); a.download = name; a.style.display = 'none';
+                try { a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); } catch (_) { a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); }
+                document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1500); return;
+            }
+            const done = rows.filter(r => r.assessment !== 'Outstanding').length, passed = rows.filter(r => r.assessment === 'Passed').length;
+            const old = document.getElementById('printFrame'); if (old) old.remove(); const fr = document.createElement('iframe'); fr.id = 'printFrame'; fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(fr); const w = fr.contentWindow;
+            w.document.open(); w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>CSDSA training summary</title><style>body{font-family:Arial,sans-serif;color:#17251d;margin:32px}h1{color:#087443;margin:0 0 4px}p{margin:4px 0 14px;color:#445}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border:1px solid #cfd8d2;padding:7px 9px;text-align:left}th{background:#087443;color:#fff}tr:nth-child(even) td{background:#f3f8f5}</style></head><body><h1>CSDSA Learning Academy</h1><p><b>${esc(company)}</b> · Training summary · ${today}</p><p>${rows.length} employees · ${done} assessments completed · ${passed} passed</p><table><thead><tr><th>Employee</th><th>ID / contact</th><th>Job title</th><th>Course</th><th>Assessment</th><th>Score</th><th>Attempts</th><th>Date</th><th>Certificate</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.id)}</td><td>${esc(r.job)}</td><td>${r.course}</td><td>${r.assessment}</td><td>${r.score || '—'}</td><td>${r.attempts}</td><td>${esc(r.date) || '—'}</td><td>${esc(r.cert) || '—'}</td></tr>`).join('') || '<tr><td colspan="9">No employees yet.</td></tr>'}</tbody></table></body></html>`);
+            w.document.close(); setTimeout(() => { try { w.focus(); w.print(); } catch (_) { window.print(); } }, 400);
+        }
+        function employeeDetails(i) {
+            const e = employees[i]; if (!e) return;
+            $('employeeDetailsPanel').innerHTML = `<div class="notice" style="margin-top:16px"><h3>${esc(e.name)}</h3><p>${esc(e.idNumber ? 'ID: ' + e.idNumber : (e.phone || e.email))} · ${esc(e.jobTitle)}</p><div class="payrow"><span>Course</span><b>${'Enrolled · ' + e.payState}</b></div><div class="payrow"><span>Assessment</span><b>${e.quizCompleted ? (e.passed ? 'Passed' : 'Not passed') : 'Outstanding'}</b></div><div class="payrow"><span>Last score</span><b>${e.lastScore === null ? '—' : Math.round(e.lastScore / 30 * 100) + '%'}</b></div><div class="payrow"><span>Last activity</span><b>${e.lastActive ? dateText(e.lastActive) : '—'}</b></div></div>`;
+        }
+        async function addEmployee(e) {
+            e.preventDefault(); showMsg('empError', ''); const v = id => $(id).value.trim(); const bad = m => showMsg('empError', m);
+            const name = v('empname'), idn = normId(v('empidnumber')), phone = v('empphone') ? normPhone(v('empphone')) : '', email = v('empemail'), temp = $('empPassword').value.trim();
+            if (!RX.name.test(name)) return bad('Enter the employee’s full name using letters only.');
+            if (!idn) return bad('That ID or passport number is not valid. Check it and try again.'); if (v('empphone') && !phone) return bad('Enter a valid cellphone number, for example 0821234567, or leave it blank.');
+            if (email && !normEmail(email)) return bad('Enter a valid email address or leave it blank.');
+            if (temp && !pwOk(temp)) return bad('Temporary password: ' + PW_RULE);
+            await busy(e, async () => {
+                try {
+                    const r = await api('/org/employees', { method: 'POST', body: { name, id_number: idn, phone: v('empphone'), email: email || undefined, job_title: v('empjobtitle'), temp_password: temp || undefined } }); await refreshMe();
+                    await renderTeam($('content'), `<div class="notice"><b>${esc(r.employee.name)} was added.</b><p>Sign-in ID: <b>${esc(r.employee.idNumber)}</b>${r.temporaryPassword ? ` · Temporary password: <b id="tempPw">${esc(r.temporaryPassword)}</b> <button class="btn small outline" onclick="copyText('${esc(r.temporaryPassword)}','Temporary password')">Copy</button><br><span class="fine">Shown once. Share it privately; they must change it at first sign-in.</span>` : ' · They must change the temporary password you chose at first sign-in.'}</p></div>`);
+                } catch (err) { bad(err.message); }
+            });
+        }
+
+        function renderProfile(c) {
+            c.innerHTML = heading('My profile', 'Account details and password.') + (user.mustChangePassword ? '<div class="notice"><b>Choose a new password to continue.</b> Your account was created with a temporary password.</div>' : '') + `<div class="panel"><div class="payrow"><span>Name</span><b>${esc(user.name)}</b></div>${user.email ? `<div class="payrow"><span>Email</span><b>${esc(user.email)}</b></div>` : ''}${user.idNumber ? `<div class="payrow"><span>ID / passport</span><b>${esc(user.idNumber)}</b></div>` : ''}${user.phone ? `<div class="payrow"><span>Cellphone</span><b>${esc(user.phone)}</b></div>` : ''}<div class="payrow"><span>Account type</span><b>${{ business: 'Business administrator', employee: 'Employee', individual: 'Individual learner', admin: 'Administrator' }[user.type]}</b></div>${user.company ? `<div class="payrow"><span>Organisation</span><b>${esc(user.company)}</b></div>` : ''}<div class="payrow"><span>Page tab ID</span><b>${esc((window.CSDSA_PAYMENT_CONFIG || {}).pageTabId || 'CSDSA-LEARNING-ACADEMY')}</b></div></div><div class="panel"><h3>Change password</h3><div id="pwError" class="form-error" role="alert"></div><div id="pwOk" class="form-ok" role="status"></div><form onsubmit="changePassword(event)" novalidate><div class="field"><label>Current password</label><input type="password" id="curpw" autocomplete="current-password"></div><div class="field"><label>New password</label><input type="password" id="newpw" autocomplete="new-password"></div><div class="field"><label>Confirm new password</label><input type="password" id="newpw2" autocomplete="new-password"></div><button class="btn">Save new password</button></form></div>`;
+        }
+        async function changePassword(e) {
+            e.preventDefault(); showMsg('pwError', ''); showMsg('pwOk', ''); const cur = $('curpw').value, np = $('newpw').value;
+            if (!cur) return showMsg('pwError', 'Enter your current password.'); if (!pwOk(np)) return showMsg('pwError', PW_RULE); if (np !== $('newpw2').value) return showMsg('pwError', 'The two new passwords do not match.');
+            await busy(e, async () => { try { const r = await api('/auth/change-password', { method: 'POST', body: { current_password: cur, new_password: np } }); showMsg('pwOk', r.message); if (user.mustChangePassword) { await refreshMe(); enter(); } else e.target.reset(); } catch (err) { showMsg('pwError', err.message); } });
+        }
+
+        async function renderAdmin(c) {
+            const head = heading('Payment approvals', 'Check each payment against your bank records before approving.');
+            if (!user.isAdmin) { c.innerHTML = head + lockedBox('Administrator access required', 'This page is restricted to authorised administrators.'); return; }
+            const { requests, certs } = await api('/admin/payment-requests'); adminReqs = requests;
+            const rank = r => r.status === 'pending' ? (r.submitted ? 0 : 1) : 2; requests.sort((a, b) => rank(a) - rank(b));
+            c.innerHTML = head + `<div class="panel"><h3>Payment requests</h3>${requests.length ? `<table class="table"><thead><tr><th>Learner</th><th>Purchase</th><th>Amount</th><th>Reference</th><th>Status</th><th>Action</th></tr></thead><tbody>${requests.map(r => `<tr><td>${esc(r.userName)}<br><span class="fine">${esc(r.email)}</span></td><td>${esc(r.title)}${r.forName ? `<br><span class="fine">for ${esc(r.forName)}</span>` : ''}</td><td>${money(r.amount)}</td><td>${esc(r.reference)}${r.note ? `<br><span class="fine">${esc(r.note)}</span>` : ''}${r.hasProof ? `<br><a href="#" onclick="viewProof('${esc(r.id)}');return false">View proof</a><br><span class="fine">Auto-check passed: amount and file valid</span>` : ''}</td><td>${statusText(r)}</td><td>${r.status === 'pending' ? `<button class="btn small" onclick="reviewPayment('${esc(r.id)}','approved',${r.submitted})">Approve</button> <button class="btn small outline" onclick="reviewPayment('${esc(r.id)}','rejected',${r.submitted})">Reject</button>` : '—'}</td></tr>`).join('')}</tbody></table>` : '<p>No payment requests yet.</p>'}</div><div id="proofView"></div><div class="panel"><h3>Certificates awaiting signature</h3>${(certs || []).filter(c => c.signStatus === 'requested').map(c => `<div class="lesson"><span><b>${esc(c.learner)}</b> · ${esc(c.number)}<br><span class="fine">${esc(c.who)} · sent to ${esc(c.signRequestedTo || '')}</span></span><button class="btn small" onclick="signCert('${esc(c.verifyToken)}')">Mark as signed</button></div>`).join('') || '<p>None waiting.</p>'}</div>`;
+        }
+        var adminReqs = [];
+        async function viewProof(id) {
+            const r = adminReqs.find(x => x.id === id); if (!r) return; const { proof } = await api('/admin/proof/' + id); r.proof = proof; const blob = await (await fetch(proof.data)).blob(), u = URL.createObjectURL(blob);
+            $('proofView').innerHTML = `<div class="panel"><h3>Proof of payment · ${esc(r.reference)}</h3>${r.proof.type === 'application/pdf' ? `<iframe src="${u}" style="width:100%;height:520px;border:0"></iframe>` : `<img src="${u}" alt="Proof of payment" style="max-width:100%">`}<p><a href="${u}" download="${esc(r.proof.name)}">Download file</a></p></div>`; $('proofView').scrollIntoView({ behavior: 'smooth' });
+        }
+        async function signCert(token) { try { await api(`/admin/certificates/${token}/sign`, { method: 'POST' }); } catch (err) { alert(err.message); } page('admin'); }
+        async function requestSignature() {
+            const to = normEmail($('signTo').value); if (!to) return alert('Enter a valid email address.');
+            try { await api('/certificates/request-signature', { method: 'POST', body: { to } }); } catch (err) { return alert(err.message); }
+            const url = `${location.href.split(/[?#]/)[0]}?verify=${certificate.verifyToken}`, a = document.createElement('a');
+            a.href = 'mailto:' + to + '?subject=' + encodeURIComponent('Certificate for signature: ' + certificate.number) + '&body=' + encodeURIComponent(`Please sign the certificate below.\n\nLearner: ${certificate.learner}\nCourse: ${certificate.course}\nScore: ${certificate.score}/${certificate.total}\nCertificate number: ${certificate.number}\nVerify: ${url}`);
+            a.style.display = 'none'; document.body.appendChild(a); a.click(); a.remove(); page('certificate');
+        }
+        async function reviewPayment(id, status, submitted) {
+            if (!confirm(status === 'approved' ? (submitted ? 'Approve this payment? Only do this after you see the money in your bank account.' : 'The learner has NOT pressed “I have paid”. Approve anyway? Only do this if you can see the money in your bank account.') : 'Reject this payment request?')) return;
+            try { await api(`/admin/payment-requests/${id}/review`, { method: 'POST', body: { status } }); } catch (err) { alert(err.message); }
+            page('admin');
+        }
+
+        const ROUTES = { learn: renderLearn, freeinfo: renderFree, quiz: c => renderQuiz(c), certificate: renderCertificate, membership: renderMembership, memberinfo: renderMemberInfo, webinarroom: renderWebinarRoom, eft: renderPay, payments: renderPayments, wallet: renderWallet, team: c => renderTeam(c), profile: renderProfile, admin: renderAdmin };
+
+        async function showVerify(token) {
+            $('auth').innerHTML = '<div class="auth-right"><div class="auth-inner"><div class="brand"><img class="brand-logo" src="csdsa-logo.png" alt="CSDSA"></div><h2>Certificate verification</h2><p class="muted">Checking…</p></div></div>';
+            let html; try { const r = await api('/certificates/verify/' + encodeURIComponent(token), { auth: false }); const c = r.certificate; html = `<div class="notice"><b>Valid certificate</b></div><div class="payrow"><span>Learner</span><b>${esc(c.learner)}</b></div><div class="payrow"><span>Course</span><b>${esc(c.course)}</b></div><div class="payrow"><span>Score</span><b>${c.score}/${c.total}</b></div><div class="payrow"><span>Number</span><b>${esc(c.number)}</b></div><div class="payrow"><span>Issued</span><b>${dateText(c.issuedAt)}</b></div>`; } catch (_) { html = '<div class="notice"><b>Certificate not found.</b> Check the link and try again.</div>'; }
+            $('auth').innerHTML = `<div class="auth-right"><div class="auth-inner"><div class="brand"><img class="brand-logo" src="csdsa-logo.png" alt="CSDSA"></div><h2>Certificate verification</h2>${html}<p style="margin-top:20px"><a href="${location.pathname}">← Back to the learning portal</a></p></div></div>`;
+        }
+
+        async function boot() {
+            loadTokens();
+            try { cfg = await api('/config', { auth: false }); setFees(cfg.fees); } catch (_) { }
+            const q = new URLSearchParams(location.search), h = new URLSearchParams(location.hash.replace(/^#/, ''));
+            if (q.get('verify')) return showVerify(q.get('verify'));
+            if (h.get('error_description')) { history.replaceState(null, '', location.pathname); showAuth('login'); return showMsg('loginError', h.get('error_description') + ' Request a new link if needed.'); }
+            if (h.get('access_token')) {
+                history.replaceState(null, '', location.pathname + location.search);
+                if (h.get('type') === 'recovery') { resetToken = h.get('access_token'); return showAuth('reset'); }
+                storeTokens({ access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_at: Number(h.get('expires_at')) || 0 }, false);
+            }
+            if (tokens) { try { return await startSession(); } catch (_) { storeTokens(null); } }
+            showAuth('login');
+        }
+        boot();
+
+    </script>
+</body>
