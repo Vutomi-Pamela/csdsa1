@@ -21,7 +21,7 @@ async function api(path, body) {
 }
 function loginView(m) {
   $('out').style.display = 'none'; $('who').textContent = '';
-  $('app').innerHTML = `<div class="card login"><h2>Administrator sign in</h2><label>Email</label><input id="id" autocomplete="username"><label>Password</label><input id="pw" type="password" autocomplete="current-password"><button class="pri" onclick="login()">Sign in</button> <button onclick="regView()">Create administrator account</button><p class="fine">Use your email and password. No PIN is needed.</p><p class="err">${esc(m || '')}</p></div>`;
+  $('app').innerHTML = `<div class="card login"><h2>Administrator sign in</h2><p>Enter the administrator password to manage payment approvals and access.</p><form onsubmit="login(event)"><label>Administrator password</label><input id="pw" type="password" autocomplete="current-password" required><button class="pri" type="submit">Open admin page</button></form><p class="fine">Administrator access only.</p><p class="err">${esc(m || '')}</p><p><a href="/">← Back to learner login</a></p></div>`;
 }
 function regView(m) {
   $('app').innerHTML = `<div class="card login"><h2>Create administrator account</h2><p>Use the email listed in ADMIN_EMAILS. Other emails will not get administrator access.</p><label>Full name</label><input id="rn"><label>Email</label><input id="re"><label>Password (8+ characters, with a letter and a number)</label><input id="rp" type="password"><button class="pri" onclick="reg()">Create account</button> <button onclick="loginView()">Back</button><p class="err">${esc(m || '')}</p></div>`;
@@ -30,8 +30,9 @@ async function reg() {
   const n = $('rn').value.trim().split(/\s+/);
   try { const r = await api('/auth/register', { first_name: n[0] || '', last_name: n.slice(1).join(' ') || '-', email: $('re').value, password: $('rp').value, account_type: 'individual' }); tok = r.session.access_token; sessionStorage.setItem('adm', tok); await load(); } catch (e) { regView(e.message); }
 }
-async function login() {
-  try { const r = await api('/auth/login', { identifier: $('id').value, password: $('pw').value }); tok = r.session.access_token; sessionStorage.setItem('adm', tok); await load(); } catch (e) { loginView(e.message); }
+async function login(event) {
+  if (event) event.preventDefault();
+  try { const r = await api('/admin/login', { password: $('pw').value }); tok = r.session.access_token; sessionStorage.setItem('adm', tok); await load(); } catch (e) { loginView(e.message); }
 }
 function logout() { sessionStorage.removeItem('adm'); tok = null; loginView(); }
 async function load() {

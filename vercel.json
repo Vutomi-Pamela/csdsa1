@@ -1,1 +1,10 @@
-{ "outputDirectory": "public", "functions": { "api/index.js": { "maxDuration": 15 } } }
+{
+  "version": 2,
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.mjs": { "maxDuration": 30 }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" }
+  ]
+}
