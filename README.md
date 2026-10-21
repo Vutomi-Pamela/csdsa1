@@ -27,11 +27,17 @@ Create a private repository and upload everything in this folder, keeping the fo
    RESEND_API_KEY      the Resend key
    CERT_EMAIL          vutomiringana@gmail.com
    PAYSHAP_ID          0815766197
+   MEMBER_VIDEOS       optional, for the paid member videos: Title|YouTube or Vimeo link, separated by commas
 4. Deploy. If you add or change a variable later, redeploy once.
 
+## If login says "Failed to fetch" or "Could not reach"
+1. Open your-address/api in the browser. It should show {"ok":true,"database":"ready",...}. If database says tables missing, run neon/schema.sql. If it says cannot connect, check DATABASE_URL. If sessionSecret is false, add SESSION_SECRET and redeploy.
+2. Vercel > Project > Settings > Deployment Protection: set Vercel Authentication to Disabled (it asks visitors to sign in to Vercel), then redeploy.
+3. Use the production address from the Domains tab, and open the site on that https address, not a downloaded file.
+
 ## 5. First use
-1. Open your Vercel address and register an account with the same email you put in ADMIN_EMAILS. Do this straight away.
-2. Open your-address/admin.html and sign in. You will see payments, proof viewing, certificates, employers and individuals.
+1. Open your-address/admin.html (also linked on the login page) and choose Create administrator account, using the email in ADMIN_EMAILS. No PIN is needed. Do this straight away.
+2. Sign in there. You will see payments, proof viewing, certificates, employers and individuals.
 
 ## 6. Test
 1. Register a business, add an employee with a valid ID or passport number.

@@ -2,7 +2,8 @@ import { neon } from '@neondatabase/serverless';
 import { scryptSync, randomBytes, timingSafeEqual, createHmac } from 'node:crypto';
 import * as C from './_content.js';
 
-const sql = neon(process.env.DATABASE_URL);
+let _s; const sql = { query: (...a) => (_s = _s || neon(process.env.DATABASE_URL)).query(...a) };
+const vids = () => String(process.env.MEMBER_VIDEOS || '').split(',').map(x => { const [t, ...u] = x.split('|'), s = u.join('|').trim(), y = s.match(/^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,15})/), v = s.match(/^https:\/\/(?:www\.)?vimeo\.com\/(\d+)/); return y ? { title: t.trim(), url: 'https://www.youtube.com/embed/' + y[1] } : v ? { title: t.trim(), url: 'https://player.vimeo.com/video/' + v[1] } : null; }).filter(Boolean);
 const SECRET = process.env.SESSION_SECRET || '', CERT_TO = process.env.CERT_EMAIL || 'vutomiringana@gmail.com', PAY = process.env.PAYSHAP_ID || '0815766197';
 const ADMINS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean), isAdmin = u => !!isAdmin(u) || ADMINS.includes(u.email);
 const SITE = process.env.SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? 'https://' + process.env.VERCEL_PROJECT_PRODUCTION_URL : '');
@@ -14,7 +15,7 @@ const where = async (t, k, v) => (await sql.query(`select data from ${t} where d
 const all = async t => (await sql.query(`select data from ${t}`)).map(r => r.data);
 const hash = p => { const s = randomBytes(16).toString('hex'); return s + ':' + scryptSync(p, s, 32).toString('hex'); };
 const same = (p, h) => { const [s, k] = String(h).split(':'); return !!k && timingSafeEqual(Buffer.from(k, 'hex'), scryptSync(p, s, 32)); };
-const sign = id => { const b = id + '.' + (Date.now() + 7 * 864e5); return b + '.' + createHmac('sha256', SECRET).update(b).digest('hex'); };
+const sign = id => { if (!SECRET) throw err('The server is not set up yet (SESSION_SECRET is missing).', 500); const b = id + '.' + (Date.now() + 7 * 864e5); return b + '.' + createHmac('sha256', SECRET).update(b).digest('hex'); };
 const unsign = t => { const [id, exp, sig] = String(t || '').split('.'); if (!sig || +exp < Date.now()) return null; const ok = createHmac('sha256', SECRET).update(id + '.' + exp).digest('hex'); return ok.length === sig.length && timingSafeEqual(Buffer.from(ok), Buffer.from(sig)) ? id : null; };
 const email = v => { const e = String(v || '').trim().toLowerCase(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) ? e : ''; };
 const phone = v => { let d = String(v || '').replace(/\D/g, ''); if (d.startsWith('27')) d = '0' + d.slice(2); return /^0\d{9}$/.test(d) ? d : ''; };
@@ -72,7 +73,7 @@ async function route(path, b, token) {
   if (path === '/auth/change-password') { if (!same(b.current_password || '', u.pw)) throw err('Your current password is not correct.'); if (!pw(b.new_password)) throw err('Password must be at least 8 characters with a letter and a number.'); u.pw = hash(b.new_password); u.must = false; await put('users', u); return { message: 'Password updated.' }; }
   if (path === '/content/free') return { content: { title: 'Introduction to food safety', body: ['Food safety protects customers and your business. Unsafe food can cause serious illness, product recalls and legal action.', 'Good hygiene, correct temperatures, clean premises and accurate records are the foundations of safe food. This free overview introduces the ideas covered in the full course.'] } };
   if (path === '/content/course') { if (!p.course) throw err('Course access required.', 403); return { modules: C.SYLLABUS.map((m, i) => ({ ...m, content: C.MOD[i][0], check: C.MOD[i][1] })) }; }
-  if (path === '/content/member-library') { if (p.membership < Date.now()) throw err('Membership required.', 403); return { sections: C.MEMBER_LIB, expiresAt: new Date(p.membership).toISOString() }; }
+  if (path === '/content/member-library') { if (p.membership < Date.now()) throw err('Membership required.', 403); return { sections: C.MEMBER_LIB, videos: vids(), expiresAt: new Date(p.membership).toISOString() }; }
   if (path.startsWith('/content/webinar/')) { if (!p.webinars.includes(decodeURIComponent(path.split('/').pop()))) throw err('Purchase required.', 403); return { embedUrl: null }; }
   if (path === '/payment-requests') {
     if (!C.ITEM_TITLE[b.item_type]) throw err('Unknown item.');
@@ -129,8 +130,9 @@ async function route(path, b, token) {
 
 export default async function handler(req, res) {
   try {
+    if (req.method === 'GET') { let db = 'ready'; try { await sql.query('select 1 from users limit 1'); } catch (e) { db = e && e.code === '42P01' ? 'tables missing: run neon/schema.sql' : 'cannot connect: check DATABASE_URL'; } return res.status(200).json({ ok: true, database: db, sessionSecret: !!process.env.SESSION_SECRET, resend: !!process.env.RESEND_API_KEY, admins: ADMINS.length }); }
     if (req.method !== 'POST') throw err('Not allowed', 405);
     const q = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {}, t = String(req.headers.authorization || '').replace(/^Bearer /, '');
     res.status(200).json(await route(String(q.path || ''), q.body || {}, t));
-  } catch (e) { res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong. Try again.' }); }
+  } catch (e) { if (!e.status) console.error(e); res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong. Try again.' }); }
 }
