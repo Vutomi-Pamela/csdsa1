@@ -16,19 +16,12 @@ input{font:inherit;padding:9px;border:1px solid #b9cbbf;border-radius:8px;width:
 let tok = sessionStorage.getItem('adm'), D = null, tab = 'pay';
 const $ = id => document.getElementById(id), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 async function api(path, body) {
-  let r; try { r = await fetch('/api', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (tok || '') }, body: JSON.stringify({ path, body: body || {} }) }); } catch (_) { throw new Error('Cannot reach the server. Open this page from your live https address, not from a downloaded file.'); }
+  const r = await fetch('/api', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (tok || '') }, body: JSON.stringify({ path, body: body || {} }) });
   const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || 'Something went wrong.'); return j;
 }
 function loginView(m) {
   $('out').style.display = 'none'; $('who').textContent = '';
-  $('app').innerHTML = `<div class="card login"><h2>Administrator sign in</h2><label>Email</label><input id="id" autocomplete="username"><label>Password</label><input id="pw" type="password" autocomplete="current-password"><button class="pri" onclick="login()">Sign in</button> <button onclick="regView()">Create administrator account</button><p class="fine">Use your email and password. No PIN is needed.</p><p class="err">${esc(m || '')}</p></div>`;
-}
-function regView(m) {
-  $('app').innerHTML = `<div class="card login"><h2>Create administrator account</h2><p>Use the email listed in ADMIN_EMAILS. Other emails will not get administrator access.</p><label>Full name</label><input id="rn"><label>Email</label><input id="re"><label>Password (8+ characters, with a letter and a number)</label><input id="rp" type="password"><button class="pri" onclick="reg()">Create account</button> <button onclick="loginView()">Back</button><p class="err">${esc(m || '')}</p></div>`;
-}
-async function reg() {
-  const n = $('rn').value.trim().split(/\s+/);
-  try { const r = await api('/auth/register', { first_name: n[0] || '', last_name: n.slice(1).join(' ') || '-', email: $('re').value, password: $('rp').value, account_type: 'individual' }); tok = r.session.access_token; sessionStorage.setItem('adm', tok); await load(); } catch (e) { regView(e.message); }
+  $('app').innerHTML = `<div class="card login"><h2>Administrator sign in</h2><label>Email</label><input id="id" autocomplete="username"><label>Password</label><input id="pw" type="password" autocomplete="current-password"><button class="pri" onclick="login()">Sign in</button><p class="err">${esc(m || '')}</p></div>`;
 }
 async function login() {
   try { const r = await api('/auth/login', { identifier: $('id').value, password: $('pw').value }); tok = r.session.access_token; sessionStorage.setItem('adm', tok); await load(); } catch (e) { loginView(e.message); }
