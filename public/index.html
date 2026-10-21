@@ -915,7 +915,7 @@
                 <div class="side-label">ACCOUNT</div><button class="navbtn" data-page="team" onclick="page('team')">♙
                     &nbsp; Organisation management</button><button class="navbtn" data-page="profile"
                     onclick="page('profile')">⚙ &nbsp; My profile</button>
-                <button class="navbtn" data-page="admin" onclick="page('admin')">✓ &nbsp; Administration</button>
+                <button class="navbtn" data-page="admin" onclick="page('admin')">✓ &nbsp; Payment approvals</button>
             </aside>
             <main id="content"></main>
         </div>
@@ -1224,79 +1224,19 @@
             await busy(e, async () => { try { const r = await api('/auth/change-password', { method: 'POST', body: { current_password: cur, new_password: np } }); showMsg('pwOk', r.message); if (user.mustChangePassword) { await refreshMe(); enter(); } else e.target.reset(); } catch (err) { showMsg('pwError', err.message); } });
         }
 
-        var adminReqs = [], adminUsers = [], adminCerts = [], adminTab = 'payments', adminFilter = 'review', adminQuery = '', adminUserQuery = '';
-        const WEBINAR_ID = 'food-safety-essentials';
-        const ADMIN_FILTERS = [['review', 'Needs review'], ['unpaid', 'Awaiting payment'], ['approved', 'Approved'], ['rejected', 'Rejected'], ['all', 'All']];
-        const reqGroup = r => r.status === 'pending' ? (r.submitted ? 'review' : 'unpaid') : (r.status === 'rejected' ? 'rejected' : 'approved');
-        async function loadAdmin() {
-            const [p, u] = await Promise.all([api('/admin/payment-requests'), api('/admin/users')]);
-            adminReqs = p.requests; adminCerts = p.certs || []; adminUsers = u.users;
-        }
         async function renderAdmin(c) {
-            const head = heading('Administration', 'Review payments, open proofs of payment and give or remove access.');
+            const head = heading('Payment approvals', 'Check each payment against your bank records before approving.');
             if (!user.isAdmin) { c.innerHTML = head + lockedBox('Administrator access required', 'This page is restricted to authorised administrators.'); return; }
-            await loadAdmin();
-            c.innerHTML = head + '<div id="adminBody"></div>';
-            drawAdmin();
+            const { requests, certs } = await api('/admin/payment-requests'); adminReqs = requests;
+            const rank = r => r.status === 'pending' ? (r.submitted ? 0 : 1) : 2; requests.sort((a, b) => rank(a) - rank(b));
+            c.innerHTML = head + `<div class="panel"><h3>Payment requests</h3>${requests.length ? `<table class="table"><thead><tr><th>Learner</th><th>Purchase</th><th>Amount</th><th>Reference</th><th>Status</th><th>Action</th></tr></thead><tbody>${requests.map(r => `<tr><td>${esc(r.userName)}<br><span class="fine">${esc(r.email)}</span></td><td>${esc(r.title)}${r.forName ? `<br><span class="fine">for ${esc(r.forName)}</span>` : ''}</td><td>${money(r.amount)}</td><td>${esc(r.reference)}${r.note ? `<br><span class="fine">${esc(r.note)}</span>` : ''}${r.hasProof ? `<br><a href="#" onclick="viewProof('${esc(r.id)}');return false">View proof</a><br><span class="fine">Auto-check passed: amount and file valid</span>` : ''}</td><td>${statusText(r)}</td><td>${r.status === 'pending' ? `<button class="btn small" onclick="reviewPayment('${esc(r.id)}','approved',${r.submitted})">Approve</button> <button class="btn small outline" onclick="reviewPayment('${esc(r.id)}','rejected',${r.submitted})">Reject</button>` : '—'}</td></tr>`).join('')}</tbody></table>` : '<p>No payment requests yet.</p>'}</div><div id="proofView"></div><div class="panel"><h3>Certificates awaiting signature</h3>${(certs || []).filter(c => c.signStatus === 'requested').map(c => `<div class="lesson"><span><b>${esc(c.learner)}</b> · ${esc(c.number)}<br><span class="fine">${esc(c.who)} · sent to ${esc(c.signRequestedTo || '')}</span></span><button class="btn small" onclick="signCert('${esc(c.verifyToken)}')">Mark as signed</button></div>`).join('') || '<p>None waiting.</p>'}</div>`;
         }
-        function adminSwitch(tab) { adminTab = tab; drawAdmin(); }
-        function drawAdmin() {
-            const n = k => adminReqs.filter(r => reqGroup(r) === k).length;
-            const tabs = [['payments', 'Payments'], ['users', 'Users and access'], ['certs', 'Certificates']];
-            const stats = `<div class="stats"><div class="stat"><span>Needs review</span><strong>${n('review')}</strong></div><div class="stat"><span>Awaiting payment</span><strong>${n('unpaid')}</strong></div><div class="stat"><span>Approved</span><strong>${n('approved')}</strong></div><div class="stat"><span>Registered users</span><strong>${adminUsers.length}</strong></div></div>`;
-            const bar = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0">${tabs.map(x => `<button class="btn small ${adminTab === x[0] ? '' : 'outline'}" onclick="adminSwitch('${x[0]}')">${x[1]}</button>`).join('')}</div>`;
-            let body = '';
-            if (adminTab === 'payments') {
-                body = `<div id="proofView"></div><div class="panel"><h3>Payment requests</h3><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"><select id="adminFilter" onchange="adminFilter=this.value;drawAdminList()">${ADMIN_FILTERS.map(f => `<option value="${f[0]}" ${adminFilter === f[0] ? 'selected' : ''}>${f[1]}</option>`).join('')}</select><input id="adminSearch" placeholder="Search name, email, phone, ID or reference" value="${esc(adminQuery)}" oninput="adminQuery=this.value;drawAdminList()" style="flex:1;min-width:220px"></div><div id="adminList" style="overflow-x:auto"></div></div>`;
-            } else if (adminTab === 'users') {
-                body = `<div id="accessPanel"></div><div class="panel"><h3>Users and access</h3><div style="margin-bottom:14px"><input id="adminUserSearch" placeholder="Search name, email, phone, ID or company" value="${esc(adminUserQuery)}" oninput="adminUserQuery=this.value;drawAdminUsers()" style="width:100%"></div><div id="adminUserList" style="overflow-x:auto"></div></div>`;
-            } else {
-                const waiting = adminCerts.filter(x => x.signStatus === 'requested'), done = adminCerts.filter(x => x.signStatus !== 'requested');
-                body = `<div class="panel"><h3>Certificates awaiting signature</h3>${waiting.map(x => `<div class="lesson"><span><b>${esc(x.learner)}</b> · ${esc(x.number)}<br><span class="fine">${esc(x.who)} · sent to ${esc(x.signRequestedTo || '')}</span></span><button class="btn small" onclick="signCert('${esc(x.verifyToken)}')">Mark as signed</button></div>`).join('') || '<p>None waiting.</p>'}</div><div class="panel"><h3>Issued certificates</h3>${done.map(x => `<div class="payrow"><span><b>${esc(x.learner)}</b><br><span class="fine">${esc(x.who)} · ${dateText(x.issuedAt)}</span></span><span>${esc(x.number)}<br><span class="fine">${x.signStatus === 'signed' ? 'Signed' : 'Not yet requested'}</span></span></div>`).join('') || '<p>No certificates issued yet.</p>'}</div>`;
-            }
-            $('adminBody').innerHTML = stats + bar + body;
-            if (adminTab === 'payments') drawAdminList();
-            if (adminTab === 'users') drawAdminUsers();
-        }
-        function drawAdminList() {
-            const q = adminQuery.trim().toLowerCase();
-            const rows = adminReqs.filter(r => (adminFilter === 'all' || reqGroup(r) === adminFilter) && (!q || [r.userName, r.email, r.phone, r.idNumber, r.reference, r.title, r.company].join(' ').toLowerCase().includes(q))).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-            $('adminList').innerHTML = rows.length ? `<table class="table"><thead><tr><th>Learner</th><th>Purchase</th><th>Amount</th><th>Reference and proof</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.userName)}<br><span class="fine">${esc(r.email || r.idNumber)}${r.phone ? ' · ' + esc(r.phone) : ''}</span>${r.company ? `<br><span class="fine">${esc(r.company)}</span>` : ''}</td><td>${esc(r.title)}<br><span class="fine">${dateText(r.createdAt)}</span></td><td>${money(r.amount)}</td><td>${esc(r.reference)}${r.note ? `<br><span class="fine">${esc(r.note)}</span>` : ''}${r.hasProof ? `<br><a href="#" onclick="viewProof('${esc(r.id)}');return false">View proof</a>` : (r.manual ? '<br><span class="fine">Given by administrator</span>' : '<br><span class="fine">No proof uploaded</span>')}</td><td>${statusText(r)}</td><td>${r.status === 'pending' || r.status === 'rejected' ? `<button class="btn small" onclick="reviewPayment('${esc(r.id)}','approved',${!!r.submitted})">Approve</button>${r.status === 'pending' ? ` <button class="btn small outline" onclick="reviewPayment('${esc(r.id)}','rejected',${!!r.submitted})">Reject</button>` : ''}` : '—'}</td></tr>`).join('')}</tbody></table>` : '<p>Nothing to show for this filter.</p>';
-        }
-        function accessLine(a) {
-            const out = [];
-            out.push(`Course ${a.course ? '✓' : '—'}`);
-            out.push(`Assessment ${a.assessment ? '✓' : '—'}`);
-            out.push(`Membership ${a.membershipUntil ? 'until ' + dateText(a.membershipUntil) : '—'}`);
-            out.push(`Webinar ${a.webinars.includes(WEBINAR_ID) ? '✓' : '—'}`);
-            return out.join('<br>');
-        }
-        function drawAdminUsers() {
-            const q = adminUserQuery.trim().toLowerCase();
-            const rows = adminUsers.filter(u => !q || [u.name, u.email, u.phone, u.idNumber, u.company, u.employer].join(' ').toLowerCase().includes(q)).sort((a, b) => a.name.localeCompare(b.name));
-            $('adminUserList').innerHTML = rows.length ? `<table class="table"><thead><tr><th>User</th><th>Type</th><th>Access</th><th>Action</th></tr></thead><tbody>${rows.map(u => `<tr><td>${esc(u.name)}<br><span class="fine">${esc(u.email || u.idNumber)}${u.phone ? ' · ' + esc(u.phone) : ''}</span></td><td>${esc(u.type)}${u.company ? `<br><span class="fine">${esc(u.company)}</span>` : ''}${u.employer ? `<br><span class="fine">Employer: ${esc(u.employer)}</span>` : ''}</td><td class="fine">${accessLine(u.access)}${u.passed ? '<br>Assessment passed' : ''}</td><td><button class="btn small" onclick="openAccess('${esc(u.id)}')">Manage access</button></td></tr>`).join('')}</tbody></table>` : '<p>No users match.</p>';
-        }
-        function openAccess(id) {
-            const u = adminUsers.find(x => x.id === id); if (!u) return;
-            const a = u.access;
-            const items = [['course', 'Course', a.course, a.course ? 'Access active' : 'No access'], ['assessment', 'Assessment', a.assessment, a.assessment ? `Unlocked · ${a.attemptsUsed} of 2 attempts used` : 'Locked'], ['membership', 'Membership (adds 30 days)', !!a.membershipUntil, a.membershipUntil ? 'Active until ' + dateText(a.membershipUntil) : 'No active membership'], ['webinar', 'Webinar: Food Safety Essentials', a.webinars.includes(WEBINAR_ID), a.webinars.includes(WEBINAR_ID) ? 'Access active' : 'No access']];
-            $('accessPanel').innerHTML = `<div class="panel"><h3>Access for ${esc(u.name)}</h3><p class="fine">${esc(u.email || u.idNumber)}</p>${items.map(i => `<div class="payrow"><span>${i[1]}<br><span class="fine">${i[3]}</span></span><span>${i[0] === 'membership' || !i[2] ? `<button class="btn small" onclick="changeAccess('${esc(u.id)}','${i[0]}','grant')">${i[0] === 'membership' && i[2] ? 'Extend 30 days' : 'Give access'}</button>` : ''} ${i[2] ? `<button class="btn small outline" onclick="changeAccess('${esc(u.id)}','${i[0]}','revoke')">Remove access</button>` : ''}</span></div>`).join('')}<p style="margin-top:14px"><button class="btn small outline" onclick="$('accessPanel').innerHTML=''">Close</button></p></div>`;
-            $('accessPanel').scrollIntoView({ behavior: 'smooth' });
-        }
-        async function changeAccess(id, type, action) {
-            const u = adminUsers.find(x => x.id === id); if (!u) return;
-            if (!confirm((action === 'grant' ? 'Give ' : 'Remove ') + type + ' access ' + (action === 'grant' ? 'to ' : 'from ') + u.name + '?')) return;
-            try { await api('/admin/access', { method: 'POST', body: { user_id: id, item_type: type, action, item_id: type === 'webinar' ? WEBINAR_ID : undefined } }); await loadAdmin(); } catch (err) { return alert(err.message); }
-            drawAdmin(); openAccess(id);
-        }
+        var adminReqs = [];
         async function viewProof(id) {
-            const r = adminReqs.find(x => x.id === id); if (!r) return;
-            let proof; try { proof = (await api('/admin/proof/' + id)).proof; } catch (err) { return alert(err.message); }
-            const blob = await (await fetch(proof.data)).blob(), u = URL.createObjectURL(blob);
-            $('proofView').innerHTML = `<div class="panel"><h3>Proof of payment · ${esc(r.reference)}</h3><p class="fine">${esc(r.userName)} · ${esc(r.title)} · ${money(r.amount)}</p>${proof.type === 'application/pdf' ? `<iframe src="${u}" style="width:100%;height:520px;border:0"></iframe>` : `<img src="${u}" alt="Proof of payment" style="max-width:100%">`}<p><a href="${u}" download="${esc(proof.name)}">Download file</a> · <a href="#" onclick="$('proofView').innerHTML='';return false">Close</a></p></div>`;
-            $('proofView').scrollIntoView({ behavior: 'smooth' });
+            const r = adminReqs.find(x => x.id === id); if (!r) return; const { proof } = await api('/admin/proof/' + id); r.proof = proof; const blob = await (await fetch(proof.data)).blob(), u = URL.createObjectURL(blob);
+            $('proofView').innerHTML = `<div class="panel"><h3>Proof of payment · ${esc(r.reference)}</h3>${r.proof.type === 'application/pdf' ? `<iframe src="${u}" style="width:100%;height:520px;border:0"></iframe>` : `<img src="${u}" alt="Proof of payment" style="max-width:100%">`}<p><a href="${u}" download="${esc(r.proof.name)}">Download file</a></p></div>`; $('proofView').scrollIntoView({ behavior: 'smooth' });
         }
-        async function signCert(token) { try { await api(`/admin/certificates/${token}/sign`, { method: 'POST' }); await loadAdmin(); } catch (err) { alert(err.message); } drawAdmin(); }
+        async function signCert(token) { try { await api(`/admin/certificates/${token}/sign`, { method: 'POST' }); } catch (err) { alert(err.message); } page('admin'); }
         async function requestSignature() {
             const to = normEmail($('signTo').value); if (!to) return alert('Enter a valid email address.');
             try { await api('/certificates/request-signature', { method: 'POST', body: { to } }); } catch (err) { return alert(err.message); }
@@ -1306,8 +1246,8 @@
         }
         async function reviewPayment(id, status, submitted) {
             if (!confirm(status === 'approved' ? (submitted ? 'Approve this payment? Only do this after you see the money in your bank account.' : 'The learner has NOT pressed “I have paid”. Approve anyway? Only do this if you can see the money in your bank account.') : 'Reject this payment request?')) return;
-            try { await api(`/admin/payment-requests/${id}/review`, { method: 'POST', body: { status } }); await loadAdmin(); } catch (err) { alert(err.message); }
-            drawAdmin();
+            try { await api(`/admin/payment-requests/${id}/review`, { method: 'POST', body: { status } }); } catch (err) { alert(err.message); }
+            page('admin');
         }
 
         const ROUTES = { learn: renderLearn, freeinfo: renderFree, quiz: c => renderQuiz(c), certificate: renderCertificate, membership: renderMembership, memberinfo: renderMemberInfo, webinarroom: renderWebinarRoom, eft: renderPay, payments: renderPayments, wallet: renderWallet, team: c => renderTeam(c), profile: renderProfile, admin: renderAdmin };
