@@ -5,7 +5,7 @@ import * as C from './_content.js';
 let _s; const sql = { query: (...a) => (_s = _s || neon(process.env.DATABASE_URL)).query(...a) };
 const vids = () => String(process.env.MEMBER_VIDEOS || '').split(',').map(x => { const [t, ...u] = x.split('|'), s = u.join('|').trim(), y = s.match(/^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,15})/), v = s.match(/^https:\/\/(?:www\.)?vimeo\.com\/(\d+)/); return y ? { title: t.trim(), url: 'https://www.youtube.com/embed/' + y[1] } : v ? { title: t.trim(), url: 'https://player.vimeo.com/video/' + v[1] } : null; }).filter(Boolean);
 const SECRET = process.env.SESSION_SECRET || '', CERT_TO = process.env.CERT_EMAIL || 'vutomiringana@gmail.com', PAY = process.env.PAYSHAP_ID || '0815766197';
-const ADMINS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean), isAdmin = u => !!(u && (u.isAdmin || (u.email && ADMINS.includes(String(u.email).toLowerCase()))));
+const ADMINS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean), isAdmin = u => !!isAdmin(u) || ADMINS.includes(u.email);
 const SITE = process.env.SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? 'https://' + process.env.VERCEL_PROJECT_PRODUCTION_URL : '');
 const err = (m, s = 400) => Object.assign(new Error(m), { status: s });
 const rid = p => p + Date.now().toString(36) + randomBytes(3).toString('hex');
@@ -44,21 +44,13 @@ async function meOf(u) {
   }));
   return {
     user: { id: u.id, name: u.name, email: u.email || '', phone: u.phone || '', idNumber: u.idNumber || '', type: u.type, company: u.company || '', isAdmin: !!isAdmin(u), mustChangePassword: !!u.must },
-    access: { course: p.course, membership: p.membership > Date.now(), membershipExpiresAt: p.membership ? new Date(p.membership).toISOString() : null, assessment: { paid: p.att, attemptsUsed: p.used, attemptsMax: 1, canAttempt: p.att && p.used < 1 }, webinars: p.webinars },
+    access: { course: p.course, membership: p.membership > Date.now(), membershipExpiresAt: p.membership ? new Date(p.membership).toISOString() : null, assessment: { paid: p.att, attemptsUsed: p.used, attemptsMax: 2, canAttempt: p.att && p.used < 2 }, webinars: p.webinars },
     lastResult: u.result || null, certificate: cert || null,
     payments: pays.map(({ proof, ...r }) => r).sort((a, b) => b.createdAt.localeCompare(a.createdAt)), employees
   };
 }
 
 async function route(path, b, token) {
-  if (path === '/admin/login') {
-    const configuredPassword = process.env.ADMIN_PASSWORD || '12345678';
-    const suppliedPassword = String(b.password || '');
-    const expected = Buffer.from(configuredPassword);
-    const supplied = Buffer.from(suppliedPassword);
-    if (expected.length !== supplied.length || !timingSafeEqual(expected, supplied)) throw err('Incorrect administrator password.', 401);
-    return { session: { access_token: sign('__csdsa_admin_password__') }, user: { name: 'Administrator' } };
-  }
   if (path === '/config') return { fees: C.DFEES, payShapId: PAY, passMark: 80 };
   if (path === '/auth/register') {
     const e = email(b.email); if (!e) throw err('Enter a valid email address.'); if (!pw(b.password)) throw err('Password must be at least 8 characters with a letter and a number.');
@@ -75,11 +67,7 @@ async function route(path, b, token) {
   }
   if (path === '/auth/reset-request' || path === '/auth/reset-complete') throw err('Please contact CSDSA to reset your password.');
   if (path.startsWith('/certificates/verify/')) { const t = decodeURIComponent(path.split('/').pop()), c = (await all('certs')).find(x => x.verifyToken === t); if (!c) throw err('Not found', 404); return { certificate: { learner: c.learner, course: c.course, score: c.score, total: c.total, number: c.number, issuedAt: c.issuedAt, verifyToken: c.verifyToken, signStatus: c.signStatus } }; }
-  const uid = unsign(token);
-  const u = uid === '__csdsa_admin_password__'
-    ? { id: '__csdsa_admin_password__', name: 'Administrator', email: '', type: 'admin', company: '', isAdmin: true, paid: { course: false, membership: 0, att: false, used: 0, webinars: [] } }
-    : uid && await get('users', uid);
-  if (!u) throw err('Please sign in again.', 401);
+  const uid = unsign(token), u = uid && await get('users', uid); if (!u) throw err('Please sign in again.', 401);
   const p = P(u);
   if (path === '/me') return meOf(u);
   if (path === '/auth/change-password') { if (!same(b.current_password || '', u.pw)) throw err('Your current password is not correct.'); if (!pw(b.new_password)) throw err('Password must be at least 8 characters with a letter and a number.'); u.pw = hash(b.new_password); u.must = false; await put('users', u); return { message: 'Password updated.' }; }
@@ -102,18 +90,18 @@ async function route(path, b, token) {
     r.submitted = true; r.status = 'pending'; r.note = String(b.note || '').slice(0, 160); r.proof = { name: String(f.name || 'proof').slice(0, 80), type: pdf ? 'application/pdf' : 'image/jpeg', data: d }; await put('payments', r); return { ok: true };
   }
   if (path === '/assessment') {
-    if (!p.course) throw err('Unlock the course first: pay for it and wait for CSDSA to verify the payment.', 403); if (!p.att || p.used >= 1) throw err('Pay the assessment fee to unlock the questions.', 403);
-    return { attemptsUsed: p.used, attemptsMax: 1, questions: C.QS.map(q => ({ q: q[0], options: q.slice(1, 4) })) };
+    if (!p.course) throw err('Unlock the course first: pay for it and wait for CSDSA to verify the payment.', 403); if (!p.att || p.used >= 2) throw err('Pay the assessment fee to unlock the questions.', 403);
+    return { attemptsUsed: p.used, attemptsMax: 2, questions: C.QS.map(q => ({ q: q[0], options: q.slice(1, 4) })) };
   }
   if (path === '/assessment/submit') {
-    if (!p.course || !p.att || p.used >= 1) throw err('No assessment attempts available.', 403); const a = b.answers || []; if (a.length !== C.QS.length) throw err('Answer every question.');
+    if (!p.course || !p.att || p.used >= 2) throw err('No assessment attempts available.', 403); const a = b.answers || []; if (a.length !== C.QS.length) throw err('Answer every question.');
     const score = C.QS.reduce((s, q, i) => s + (a[i] === q[4] ? 1 : 0), 0), pct = score / C.QS.length * 100, passed = pct >= 80; p.used++;
     u.result = { score, total: C.QS.length, percentage: pct, passed, completed_at: new Date().toISOString() }; await put('users', u); let certificate = null;
     if (passed) {
       const n = (await all('certs')).length + 1, c = { id: u.id, uid: u.id, verifyToken: rid('v'), learner: u.name, course: C.COURSE_TITLE, score, total: C.QS.length, number: 'CSDSA-' + new Date().getFullYear() + '-' + String(n).padStart(4, '0'), issuedAt: new Date().toISOString() };
       await put('certs', c); certificate = { emailStatus: await certMail(c, u, false) };
     }
-    return { ...u.result, passMark: 80, attemptsRemaining: 1 - p.used, certificate };
+    return { ...u.result, passMark: 80, attemptsRemaining: 2 - p.used, certificate };
   }
   if (path === '/certificates/request-signature') { const c = await get('certs', u.id); if (!c) throw err('No certificate yet.', 404); if (c.signStatus !== 'signed') c.signStatus = 'requested'; c.signRequestedTo = b.to; await put('certs', c); await certMail(c, u, true); return { ok: true }; }
   if (path === '/org/employees') {

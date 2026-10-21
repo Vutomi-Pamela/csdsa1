@@ -23,8 +23,7 @@ Create a private repository and upload everything in this folder, keeping the fo
 3. Environment Variables, add all of these:
    DATABASE_URL        the Neon string
    SESSION_SECRET      any random 40+ characters
-   ADMIN_EMAILS        optional allowlist for account-based admin access
-   ADMIN_PASSWORD      12345678 (change this to a private password before production use)
+   ADMIN_EMAILS        the email you will use as administrator
    RESEND_API_KEY      the Resend key
    CERT_EMAIL          vutomiringana@gmail.com
    PAYSHAP_ID          0815766197
@@ -37,9 +36,8 @@ Create a private repository and upload everything in this folder, keeping the fo
 3. Use the production address from the Domains tab, and open the site on that https address, not a downloaded file.
 
 ## 5. First use
-1. Open your-address and select the Admin button on the learner login page, or go to /admin.html.
-2. Enter the password configured in ADMIN_PASSWORD (default requested for this version: 12345678).
-3. You will see payments, proof viewing, certificates, employers and individuals. Change the default password in Vercel Environment Variables before using this with real payment or employee records.
+1. Open your-address/admin.html (also linked on the login page) and choose Create administrator account, using the email in ADMIN_EMAILS. No PIN is needed. Do this straight away.
+2. Sign in there. You will see payments, proof viewing, certificates, employers and individuals.
 
 ## 6. Test
 1. Register a business, add an employee with a valid ID or passport number.
