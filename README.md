@@ -23,15 +23,23 @@ Create a private repository and upload everything in this folder, keeping the fo
 3. Environment Variables, add all of these:
    DATABASE_URL        the Neon string
    SESSION_SECRET      any random 40+ characters
-   ADMIN_EMAILS        the email you will use as administrator
+   ADMIN_EMAILS        optional allowlist for account-based admin access
+   ADMIN_PASSWORD      12345678 (change this to a private password before production use)
    RESEND_API_KEY      the Resend key
    CERT_EMAIL          vutomiringana@gmail.com
    PAYSHAP_ID          0815766197
+   MEMBER_VIDEOS       optional, for the paid member videos: Title|YouTube or Vimeo link, separated by commas
 4. Deploy. If you add or change a variable later, redeploy once.
 
+## If login says "Failed to fetch" or "Could not reach"
+1. Open your-address/api in the browser. It should show {"ok":true,"database":"ready",...}. If database says tables missing, run neon/schema.sql. If it says cannot connect, check DATABASE_URL. If sessionSecret is false, add SESSION_SECRET and redeploy.
+2. Vercel > Project > Settings > Deployment Protection: set Vercel Authentication to Disabled (it asks visitors to sign in to Vercel), then redeploy.
+3. Use the production address from the Domains tab, and open the site on that https address, not a downloaded file.
+
 ## 5. First use
-1. Open your Vercel address and register an account with the same email you put in ADMIN_EMAILS. Do this straight away.
-2. Open your-address/admin.html and sign in. You will see payments, proof viewing, certificates, employers and individuals.
+1. Open your-address and select the Admin button on the learner login page, or go to /admin.html.
+2. Enter the password configured in ADMIN_PASSWORD (default requested for this version: 12345678).
+3. You will see payments, proof viewing, certificates, employers and individuals. Change the default password in Vercel Environment Variables before using this with real payment or employee records.
 
 ## 6. Test
 1. Register a business, add an employee with a valid ID or passport number.
