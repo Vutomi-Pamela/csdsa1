@@ -4,7 +4,7 @@ import * as C from './_content.js';
 
 const sql = neon(process.env.DATABASE_URL);
 const SECRET = process.env.SESSION_SECRET || '', CERT_TO = process.env.CERT_EMAIL || 'vutomiringana@gmail.com', PAY = process.env.PAYSHAP_ID || '0815766197';
-const ADMINS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean), isAdmin = u => !!isAdmin(u) || ADMINS.includes(u.email);
+const ADMINS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean), isAdmin = u => ADMINS.includes(String((u && u.email) || '').toLowerCase());
 const SITE = process.env.SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? 'https://' + process.env.VERCEL_PROJECT_PRODUCTION_URL : '');
 const err = (m, s = 400) => Object.assign(new Error(m), { status: s });
 const rid = p => p + Date.now().toString(36) + randomBytes(3).toString('hex');
