@@ -53,7 +53,7 @@ async function meOf(u) {
   }));
   return {
     user: { id: u.id, name: u.name, email: u.email || '', phone: u.phone || '', idNumber: u.idNumber || '', type: u.type, company: u.company || '', isAdmin: isAdmin(u), mustChangePassword: !!u.must },
-    access: { course: p.course, membership: p.membership > Date.now(), membershipExpiresAt: p.membership ? new Date(p.membership).toISOString() : null, assessment: { paid: p.att, attemptsUsed: p.used, attemptsMax: 2, canAttempt: p.att && p.used < 2 }, webinars: p.webinars },
+    access: { course: p.course, membership: p.membership > Date.now(), membershipExpiresAt: p.membership ? new Date(p.membership).toISOString() : null, assessment: { paid: p.att, attemptsUsed: p.used, attemptsMax: 1, canAttempt: p.att && p.used < 1 }, webinars: p.webinars },
     lastResult: u.result || null, certificate: cert || null,
     payments: pays.map(({ proof, ...r }) => r).sort((a, b) => b.createdAt.localeCompare(a.createdAt)), employees
   };
@@ -99,18 +99,18 @@ async function route(path, b, token) {
     r.submitted = true; r.status = 'pending'; r.note = String(b.note || '').slice(0, 160); r.proof = { name: String(f.name || 'proof').slice(0, 80), type: pdf ? 'application/pdf' : 'image/jpeg', data: d }; await put('payments', r); return { ok: true };
   }
   if (path === '/assessment') {
-    if (!p.course) throw err('Unlock the course first: pay for it and wait for CSDSA to verify the payment.', 403); if (!p.att || p.used >= 2) throw err('Pay the assessment fee to unlock the questions.', 403);
-    return { attemptsUsed: p.used, attemptsMax: 2, questions: C.QS.map(q => ({ q: q[0], options: q.slice(1, 4) })) };
+    if (!p.course) throw err('Unlock the course first: pay for it and wait for CSDSA to verify the payment.', 403); if (!p.att || p.used >= 1) throw err('Pay the assessment fee to unlock the questions.', 403);
+    return { attemptsUsed: p.used, attemptsMax: 1, questions: C.QS.map(q => ({ q: q[0], options: q.slice(1, 4) })) };
   }
   if (path === '/assessment/submit') {
-    if (!p.course || !p.att || p.used >= 2) throw err('No assessment attempts available.', 403); const a = b.answers || []; if (a.length !== C.QS.length) throw err('Answer every question.');
+    if (!p.course || !p.att || p.used >= 1) throw err('No assessment attempts available.', 403); const a = b.answers || []; if (a.length !== C.QS.length) throw err('Answer every question.');
     const score = C.QS.reduce((s, q, i) => s + (a[i] === q[4] ? 1 : 0), 0), pct = score / C.QS.length * 100, passed = pct >= 80; p.used++;
     u.result = { score, total: C.QS.length, percentage: pct, passed, completed_at: new Date().toISOString() }; await put('users', u); let certificate = null;
     if (passed) {
       const n = (await all('certs')).length + 1, c = { id: u.id, uid: u.id, verifyToken: rid('v'), learner: u.name, course: C.COURSE_TITLE, score, total: C.QS.length, number: 'CSDSA-' + new Date().getFullYear() + '-' + String(n).padStart(4, '0'), issuedAt: new Date().toISOString() };
       await put('certs', c); certificate = { emailStatus: await certMail(c, u, false) };
     }
-    return { ...u.result, passMark: 80, attemptsRemaining: 2 - p.used, certificate };
+    return { ...u.result, passMark: 80, attemptsRemaining: 1 - p.used, certificate };
   }
   if (path === '/certificates/request-signature') { const c = await get('certs', u.id); if (!c) throw err('No certificate yet.', 404); if (c.signStatus !== 'signed') c.signStatus = 'requested'; c.signRequestedTo = b.to; await put('certs', c); await certMail(c, u, true); return { ok: true }; }
   if (path === '/org/employees') {
